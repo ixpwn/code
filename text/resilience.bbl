@@ -1,0 +1,52 @@
+\begin{thebibliography}{1}
+
+\bibitem{patriotact}
+{USA} {P}atriot {A}ct.
+\newblock H.R. 3162, Public Law 107-56.
+
+\bibitem{cyberspacepolicy}
+{USA} {W}hite {H}ouse {C}yberspace policy review.
+\newblock
+  \url{http://www.whitehouse.gov/assets/documents/Cyberspace_Policy_Review_fin%
+al.pdf}, 2009.
+
+\bibitem{ixps-mapped}
+B.~Augustin, B.~Krishnamurthy, and W.~Willinger.
+\newblock {IXP}s: mapped?
+\newblock In {\em IMC}, 2009.
+
+\bibitem{ixp-routingdiversity}
+C.~Hu, K.~Chen, Y.~Chen, and B.~Liu.
+\newblock Evaluating potential routing diversity for {I}nternet failure
+  recovery.
+\newblock In {\em INFOCOM}, 2010.
+
+\bibitem{taiwan}
+Y.~Kitamura, Y.~Lee, R.~Sakiyama, and K.~Okamura.
+\newblock Experience with restoration of asia pacific network failures from
+  taiwan earthquake.
+\newblock {\em IEICE ToC}, November 2007.
+
+\bibitem{iplane}
+H.~V. Madhyastha, T.~Isdal, M.~Piatek, C.~Dixon, T.~Anderson, A.~Krishnamurthy,
+  and A.~Venkataramani.
+\newblock {iPlane}: an information plane for distributed services.
+\newblock In {\em OSDI}, 2006.
+
+\bibitem{walter}
+R.~Oliveira, D.~Pei, W.~Willinger, B.~Zhang, and L.~Zhang.
+\newblock The (in)completeness of the observed {I}nternet {AS}-level structure.
+\newblock {\em IEEE/ACM {ToN}}, February 2010.
+
+\bibitem{measuringresilience}
+M.~Omer, R.~Nilchiani, and A.~Mostashari.
+\newblock Measuring the resilience of the global {I}nternet infrastructure
+  system.
+\newblock In {\em IEEE International Systems Conference}, 2009.
+
+\bibitem{michigan}
+J.~Wu, Y.~Zhang, Z.~M. Mao, and K.~G. Shin.
+\newblock {I}nternet routing resilience to failures: analysis and implications.
+\newblock In {\em CoNEXT}, 2007.
+
+\end{thebibliography}

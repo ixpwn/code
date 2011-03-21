@@ -1,0 +1,28 @@
+Our work builds on and takes inspiration from research in Internet resilience analysis, experience from Internet outages, PoP-level Internet topology measurement studies, and network infrastructure security policy.
+
+{\bf Resilience Analysis.}
+    Comprehensive analysis of Internet resilience remains beyond reach due to limited access to global routing and topology data. 
+    However, several limited studies have provided insight into failure\ldots\tbd{something...}
+    Wu et. al~\cite{michigan} provide the most comprehensive analysis of Internet resilience under {\it logical} link failure.
+    Using an AS-level graph, they removed one or more peering relationships and evaluated the availability of policy-compliant paths between impacted networks before and after the logical link failure.
+    
+    \begin{itemize}
+        \item measuring~\cite{measuringresilience}
+        \item INFOCOM IXP paper~\cite{ixp-routingdiversity} 
+    \end{itemize}
+
+{\bf Outage Events.}
+\begin{itemize}
+    \item Restoration study~\cite{taiwan}
+\end{itemize}
+
+{\bf PoP-level Internet Topologies.}
+    Our model for network connectivity focuses on {\it failure points}, physical locations where multiple networks connect, leading to multiple correlated failures in case of disaster.
+    We borrow techniques and data for discovering these physical locations from iPlane~\cite{iplane} and the IXP Mapping Project~\cite{ixps-mapped}.
+    iPlane clusters IP addresses into PoPs using a combination of DNS-based geolocation and TTL-based distance measurements.
+    The IXP Mapping project uses public IXP membership datasets, DNS names, looking glass servers, BGP tables, active traceroute and ping measurements, and other sources to provide the most accurate IXP membership datasets available to date. 
+
+{\bf Network Security Policy.}
+    \begin{itemize}
+        \item White House POlicy Review~\cite{cyberspacepolicy} 
+    \end{itemize}
