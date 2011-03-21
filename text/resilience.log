@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  20 MAR 2011 01:33
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  21 MAR 2011 13:34
 entering extended mode
  %&-line parsing enabled.
 **resilience.tex
@@ -291,7 +291,7 @@ LaTeX Warning: Reference `sec:conclusion' on page 2 undefined on input line 46.
 
 
 ) (./related_work.tex
-Overfull \hbox (9.66724pt too wide) in paragraph at lines 17--22
+Overfull \hbox (9.66724pt too wide) in paragraph at lines 19--24
 \ninept con-nec-tiv-ity fo-cuses on \OT1/ptm/m/it/10 fail-ure points\ninept , p
 hys-i-cal lo-ca-tions where
  []
@@ -301,7 +301,7 @@ LaTeX Font Info:    Try loading font information for OT1+pcr on input line 11.
 
 (/usr/local/texlive/2009/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)) [2] [3
+) [2]) [3
 
 ]
 (./resilience.aux)
@@ -312,7 +312,7 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  2125 strings out of 493848
  25600 string characters out of 3149207
- 84366 words of memory out of 3000000
+ 85366 words of memory out of 3000000
  5362 multiletter control sequences out of 15000+200000
  49970 words of font info for 72 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
@@ -326,7 +326,7 @@ dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2009/texmf-dist/fo
 nts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
 urw/times/utmr8a.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/urw/times/
 utmri8a.pfb>
-Output written on resilience.pdf (3 pages, 103053 bytes).
+Output written on resilience.pdf (3 pages, 103224 bytes).
 PDF statistics:
  45 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
