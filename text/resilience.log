@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  21 MAR 2011 13:34
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  22 MAR 2011 01:26
 entering extended mode
  %&-line parsing enabled.
 **resilience.tex
@@ -312,7 +312,7 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  2125 strings out of 493848
  25600 string characters out of 3149207
- 85366 words of memory out of 3000000
+ 84366 words of memory out of 3000000
  5362 multiletter control sequences out of 15000+200000
  49970 words of font info for 72 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
@@ -326,7 +326,7 @@ dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2009/texmf-dist/fo
 nts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/
 urw/times/utmr8a.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/urw/times/
 utmri8a.pfb>
-Output written on resilience.pdf (3 pages, 103224 bytes).
+Output written on resilience.pdf (3 pages, 103301 bytes).
 PDF statistics:
  45 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
