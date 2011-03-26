@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{patriotact}
 {USA} {P}atriot {A}ct.
@@ -15,11 +15,26 @@ B.~Augustin, B.~Krishnamurthy, and W.~Willinger.
 \newblock {IXP}s: mapped?
 \newblock In {\em IMC}, 2009.
 
+\bibitem{resilience-under-BGP}
+D.~Dolev, S.~Jamin, O.~O. Mokryn, and Y.~Shavitt.
+\newblock Internet resiliency to attacks and failures under bgp policy routing.
+\newblock {\em Computer Networks}, 50(16):3183 -- 3196, 2006.
+
+\bibitem{asia-comm-quake}
+D.~Greenlees and W.~Arnold.
+\newblock Asia scrambles to restore communications after quake.
+\newblock The New York Times, December 28 2006.
+
 \bibitem{ixp-routingdiversity}
 C.~Hu, K.~Chen, Y.~Chen, and B.~Liu.
 \newblock Evaluating potential routing diversity for {I}nternet failure
   recovery.
 \newblock In {\em INFOCOM}, 2010.
+
+\bibitem{blackout2003}
+B.~P. E. A. S. T.~U. James H.~Cowie, andy t.~Ogielski.
+\newblock Impact of the 2003 blackouts on internet communications.
+\newblock Technical report, Renesys Corporation, Novermber 2003.
 
 \bibitem{taiwan}
 Y.~Kitamura, Y.~Lee, R.~Sakiyama, and K.~Okamura.
@@ -43,6 +58,11 @@ M.~Omer, R.~Nilchiani, and A.~Mostashari.
 \newblock Measuring the resilience of the global {I}nternet infrastructure
   system.
 \newblock In {\em IEEE International Systems Conference}, 2009.
+
+\bibitem{resilience-complex-networks}
+A.-L.~B. Reka~Albert, Hawoong~Jeong.
+\newblock Error and attack tolerance of complex networks.
+\newblock {\em Nature}, July 2000.
 
 \bibitem{michigan}
 J.~Wu, Y.~Zhang, Z.~M. Mao, and K.~G. Shin.
