@@ -6,54 +6,46 @@ Warning--I didn't find a database entry for "asbrsomething"
 Warning--I didn't find a database entry for "probablymore"
 Warning--I didn't find a database entry for "thenews"
 Warning--to sort, need author or key in patriotact
-Too many commas in name 1 of "James H. Cowie, andy t. Ogielski, BJ Premore, Eric A. Smith, Todd Underwood" for entry blackout2003
-while executing---line 1049 of file abbrv.bst
-Too many commas in name 1 of "James H. Cowie, andy t. Ogielski, BJ Premore, Eric A. Smith, Todd Underwood" for entry blackout2003
-while executing---line 1049 of file abbrv.bst
 Warning--to sort, need author or key in cyberspacepolicy
-Too many commas in name 1 of "James H. Cowie, andy t. Ogielski, BJ Premore, Eric A. Smith, Todd Underwood" for entry blackout2003
-while executing---line 1090 of file abbrv.bst
-Too many commas in name 1 of "James H. Cowie, andy t. Ogielski, BJ Premore, Eric A. Smith, Todd Underwood" for entry blackout2003
-while executing---line 1090 of file abbrv.bst
-You've used 13 entries,
+You've used 12 entries,
             2118 wiz_defined-function locations,
-            564 strings with 5759 characters,
-and the built_in function-call counts, 3757 in all, are:
-= -- 328
-> -- 223
+            558 strings with 5591 characters,
+and the built_in function-call counts, 3626 in all, are:
+= -- 312
+> -- 227
 < -- 0
-+ -- 90
-- -- 76
++ -- 91
+- -- 78
 * -- 246
-:= -- 647
-add.period$ -- 37
-call.type$ -- 13
-change.case$ -- 78
+:= -- 619
+add.period$ -- 34
+call.type$ -- 12
+change.case$ -- 75
 chr.to.int$ -- 0
-cite$ -- 15
-duplicate$ -- 140
-empty$ -- 306
-format.name$ -- 76
-if$ -- 772
+cite$ -- 14
+duplicate$ -- 132
+empty$ -- 291
+format.name$ -- 78
+if$ -- 745
 int.to.chr$ -- 0
-int.to.str$ -- 13
+int.to.str$ -- 12
 missing$ -- 9
-newline$ -- 66
-num.names$ -- 22
-pop$ -- 108
+newline$ -- 61
+num.names$ -- 20
+pop$ -- 107
 preamble$ -- 1
-purify$ -- 64
+purify$ -- 63
 quote$ -- 0
-skip$ -- 90
+skip$ -- 85
 stack$ -- 0
-substring$ -- 99
+substring$ -- 94
 swap$ -- 17
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 52
+type$ -- 48
 warning$ -- 2
-while$ -- 23
-width$ -- 15
-write$ -- 129
-(There were 4 error messages)
+while$ -- 21
+width$ -- 14
+write$ -- 118
+(There were 5 warnings)

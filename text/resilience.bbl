@@ -10,6 +10,11 @@
   \url{http://www.whitehouse.gov/assets/documents/Cyberspace_Policy_Review_fin%
 al.pdf}, 2009.
 
+\bibitem{resilience-complex-networks}
+R.~Albert, H.~Jeong, and A.-L. Barabasai.
+\newblock Error and attack tolerance of complex networks.
+\newblock {\em Nature}, July 2000.
+
 \bibitem{ixps-mapped}
 B.~Augustin, B.~Krishnamurthy, and W.~Willinger.
 \newblock {IXP}s: mapped?
@@ -30,11 +35,6 @@ C.~Hu, K.~Chen, Y.~Chen, and B.~Liu.
 \newblock Evaluating potential routing diversity for {I}nternet failure
   recovery.
 \newblock In {\em INFOCOM}, 2010.
-
-\bibitem{blackout2003}
-B.~P. E. A. S. T.~U. James H.~Cowie, andy t.~Ogielski.
-\newblock Impact of the 2003 blackouts on internet communications.
-\newblock Technical report, Renesys Corporation, Novermber 2003.
 
 \bibitem{taiwan}
 Y.~Kitamura, Y.~Lee, R.~Sakiyama, and K.~Okamura.
@@ -58,11 +58,6 @@ M.~Omer, R.~Nilchiani, and A.~Mostashari.
 \newblock Measuring the resilience of the global {I}nternet infrastructure
   system.
 \newblock In {\em IEEE International Systems Conference}, 2009.
-
-\bibitem{resilience-complex-networks}
-A.-L.~B. Reka~Albert, Hawoong~Jeong.
-\newblock Error and attack tolerance of complex networks.
-\newblock {\em Nature}, July 2000.
 
 \bibitem{michigan}
 J.~Wu, Y.~Zhang, Z.~M. Mao, and K.~G. Shin.

@@ -2,15 +2,16 @@ Our work builds on and takes inspiration from research in Internet resilience an
 
 {\bf Resilience Analysis.}
     Comprehensive analysis of Internet resilience remains beyond reach due to limited access to global routing and topology data. 
-    However, several limited studies have provided insight into the impact of logical link failures and opportunities to make the AS graph more robust to these failures.
+    However, limited studies provide insight into the impact of logical link failures and opportunities to make the AS graph more robust to these failures.
     
     Wu et. al~\cite{michigan} provide the most in-depth analysis of Internet resilience under {\it logical} link failure.
     Using an AS-level graph, they removed one or more peering relationships and evaluated the availability of policy-compliant paths between impacted networks before and after the logical link failure.
 
     Omer et. al~\cite{measuringresilience} consider undersea cables as capacity bottlenecks for Internet connectivity between continents. 
     Like us, they look for constraints in the physical, rather than logical connectivity graph. 
-    However, their model looks at a courser level of connectivity and does not focus on IXPs as correlated failure points. 
+    However, their model focuses on inter-continental connectivity rather and does not focus on IXPs as correlated failure points. 
 
+    \justine{hey ksteph, can you add a line or two for each of these that provide a direct comparison to what we do and why it's different?}
     Albert et al.~\cite{resilience-complex-networks} studied two different
     complex networks: Erd\"{o}s-R\'{e}nyi (ER) and scale-free. An ER model
     produces a network with an exponential tail and a scale-free has a power-law
@@ -35,29 +36,33 @@ Our work builds on and takes inspiration from research in Internet resilience an
     Hu et. al~\cite{ixp-routingdiversity} also investigate logical failures on an AS-level graph, focusing opportunities to limit the impact of logical failures.
     %They looked at relaxing peering constraints (relax valley-freeness)
     Like us, they augmented thair AS graph with IXP connectivity data.
-    However, they did not use this data to consider the possibility of correlated failures.
+    Unlike our work, they did not use this data to consider the possibility of correlated failures.
     Rather, they investigated using IXPs to provide backup peers to improve connectivity in case of emergency. 
 
 {\bf Outage Events.}
-\begin{itemize}
-    \item Restoration study~\cite{taiwan}
+    Real outage events highlight the threat of correlated failure in geographic locations which suffer disaster or attack.
+    For example, the 2006 Boxing Day Earthquake in Taiwan resulted in major Internet outages when six of seven undersea cables connecting North and Southeast Asia with eachother and North America disconnected~\cite{asia-comm-quake}. 
+    While the earthquake did not cause complete disconnectivity, the affected networks suffered heavy congestion until the cables were repaired.
+    This experience serves already as a case study for emergency restoration in case of disaster~\cite{taiwan}. 
+        
+    \justine{agreed wrt the 2003 study, doesn't look as relevant as the Taiwan quake}
+    %\item Restoration study~\cite{taiwan}
 
-    \item 2003 Blackout in Northeastern US and Canada~\cite{blackout2003}. Cowie
-    et al. Looked at the prefixes that were effected by the blackout. They found
-    that even though the Internet backbone providers were unaffected by the
-    blackout many businesses were offline for hours to days, which affected many.
+    %\item 2003 Blackout in Northeastern US and Canada~\cite{blackout2003}. Cowie
+    %et al. Looked at the prefixes that were effected by the blackout. They found
+    %that even though the Internet backbone providers were unaffected by the
+    %blackout many businesses were offline for hours to days, which affected many.
     %Note sure if this report will be very useful, only looked at connectivity
     %in the geographical area of the blackout, not how the blackout affected the
     %general Internet traffic patterns and such.
-\end{itemize}
 
-    After the Taiwan earthquake in 2006 the Internet was resilient, but
-    congested~\cite{asia-comm-quake}. The Internet was able to recover and
-    switch to back-ups relatively quickly. However the loss of service can still
-    be catastrophic for both ISP's and businesses. Businesses lose information
-    needed to run their business, while ISP's lose traffic due to congestion or
-    must switch to backup links that are usually more expensive without
-    compensation.
+    %After the Taiwan earthquake in 2006 the Internet was resilient, but
+    %congested~\cite{asia-comm-quake}. The Internet was able to recover and
+    %switch to back-ups relatively quickly. However the loss of service can still
+    %be catastrophic for both ISP's and businesses. Businesses lose information
+    %needed to run their business, while ISP's lose traffic due to congestion or
+    %must switch to backup links that are usually more expensive without
+    %compensation.
 
 {\bf PoP-level Internet Topologies.}
     Our model for network connectivity focuses on {\it failure points}, physical locations where multiple networks connect, leading to multiple correlated failures in case of disaster.
