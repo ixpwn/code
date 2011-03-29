@@ -22,20 +22,20 @@ measurement studies, and network infrastructure security policy.
     rather and does not focus on IXPs as correlated failure points.
 
     \justine{hey ksteph, can you add a line or two for each of these that
-    provide a direct comparison to what we do and why it's different?}
-    Albert et al.~\cite{resilience-complex-networks} studied two different
-    complex networks: Erd\"{o}s-R\'{e}nyi (ER) and scale-free. An ER model
-    produces a network with an exponential tail and a scale-free has a power-law
-    tail for node degree. Against random node removal the scale-free model had a
-    high degree of tolerance, while the ER model was not. However for a
-    deliberate attack of removing the most connected nodes the scale-free model
-    quickly deteriorates and the ER model is effected the same as if they were
+    provide a direct comparison to what we do and why it's different?} Albert
+    et al.~\cite{resilience-complex-networks} studied two different complex
+    networks: Erd\"{o}s-R\'{e}nyi (ER) and scale-free. An ER model produces a
+    network with an exponential tail and a scale-free has a power-law tail for
+    node degree. Against random node removal the scale-free model had a high
+    degree of tolerance, while the ER model was not. However for a deliberate
+    attack of removing the most connected nodes the scale-free model quickly
+    deteriorates and the ER model is effected the same as if they were
     randomly removed. This work is different from ours since we created our
     models from actual Internet measurement, which do not necessarily exhibit
     the power law.
-    %After reading this, let's make sure to also try to come to some conclusions
-    %about the properties of the graph we create.  Note: the Internet does not
-    %exhibit the power law!
+    %After reading this, let's make sure to also try to come to some
+    %conclusions about the properties of the graph we create.  Note: the
+    %Internet does not exhibit the power law!
 
     Dolev et al.~\cite{resilience-under-BGP} looked at an AS-level graph based
     on BGP policy directionality and connectivity. They found that the Internet
@@ -44,9 +44,9 @@ measurement studies, and network infrastructure security policy.
     BGP polices. Our work is different from Dolev et al.'s because we look at
     the physical failure points of the Internet, rather than the logical
     AS-level graph.
-    %Their metrics might be useful for us: average shortest path length, size of
-    %largest component, number of connected node pairs in the network, ratio
-    %between pairs connected and all pairs
+    %Their metrics might be useful for us: average shortest path length, size
+    %of largest component, number of connected node pairs in the network,
+    %ratio between pairs connected and all pairs
     
     Hu et. al~\cite{ixp-routingdiversity} also investigate logical failures on
     an AS-level graph, focusing opportunities to limit the impact of logical
@@ -55,48 +55,51 @@ measurement studies, and network infrastructure security policy.
 
     Like us, they augmented thair AS graph with IXP connectivity data.  Unlike
     our work, they did not use this data to consider the possibility of
-    correlated failures.  Rather, they investigated using IXPs to provide backup
-    peers to improve connectivity in case of emergency.
+    correlated failures.  Rather, they investigated using IXPs to provide
+    backup peers to improve connectivity in case of emergency.
 
 {\bf Outage Events.}  Real outage events highlight the threat of correlated
     failure in geographic locations which suffer disaster or attack.  For
-    example, the 2006 Boxing Day Earthquake in Taiwan resulted in major Internet
-    outages when six of seven undersea cables connecting North and Southeast
-    Asia with eachother and North America disconnected~\cite{asia-comm-quake}.
-    While the earthquake did not cause complete disconnectivity, the affected
-    networks suffered heavy congestion until the cables were repaired.  This
-    experience serves already as a case study for emergency restoration in case
-    of disaster~\cite{taiwan}.
+    example, the 2006 Boxing Day Earthquake in Taiwan resulted in major
+    Internet outages when six of seven undersea cables connecting North and
+    Southeast Asia with eachother and North America
+    disconnected~\cite{asia-comm-quake}.  While the earthquake did not cause
+    complete disconnectivity, the affected networks suffered heavy congestion
+    until the cables were repaired.  This experience serves already as a case
+    study for emergency restoration in case of disaster~\cite{taiwan}.
         
-    \justine{agreed wrt the 2003 study, doesn't look as relevant as the Taiwan quake}
+    \justine{agreed wrt the 2003 study, doesn't look as relevant as the Taiwan
+    quake}
     %\item Restoration study~\cite{taiwan}
 
-    %\item 2003 Blackout in Northeastern US and Canada~\cite{blackout2003}. Cowie
-    %et al. Looked at the prefixes that were effected by the blackout. They found
-    %that even though the Internet backbone providers were unaffected by the
-    %blackout many businesses were offline for hours to days, which affected many.
+    %\item 2003 Blackout in Northeastern US and Canada~\cite{blackout2003}.
+    %Cowie et al. Looked at the prefixes that were effected by the blackout.
+    %They found that even though the Internet backbone providers were
+    %unaffected by the blackout many businesses were offline for hours to
+    %days, which affected many.
     %Note sure if this report will be very useful, only looked at connectivity
-    %in the geographical area of the blackout, not how the blackout affected the
-    %general Internet traffic patterns and such.
+    %in the geographical area of the blackout, not how the blackout affected
+    %the general Internet traffic patterns and such.
 
     %After the Taiwan earthquake in 2006 the Internet was resilient, but
     %congested~\cite{asia-comm-quake}. The Internet was able to recover and
-    %switch to back-ups relatively quickly. However the loss of service can still
-    %be catastrophic for both ISP's and businesses. Businesses lose information
-    %needed to run their business, while ISP's lose traffic due to congestion or
-    %must switch to backup links that are usually more expensive without
-    %compensation.
+    %switch to back-ups relatively quickly. However the loss of service can
+    %still be catastrophic for both ISP's and businesses. Businesses lose
+    %information needed to run their business, while ISP's lose traffic due to
+    %congestion or must switch to backup links that are usually more expensive
+    %without compensation.
 
-{\bf PoP-level Internet Topologies.}  Our model for network connectivity focuses
-    on {\it failure points}, physical locations where multiple networks connect,
-    leading to multiple correlated failures in case of disaster.  We borrow
-    techniques and data for discovering these physical locations from
-    iPlane~\cite{iplane} and the IXP Mapping Project~\cite{ixps-mapped}.  iPlane
-    clusters IP addresses into PoPs using a combination of DNS-based geolocation
-    and TTL-based distance measurements.  The IXP Mapping project uses public
-    IXP membership datasets, DNS names, looking glass servers, BGP tables,
-    active traceroute and ping measurements, and other sources to provide the
-    most accurate IXP membership datasets available to date.
+{\bf PoP-level Internet Topologies.}  Our model for network connectivity
+	focuses on {\it failure points}, physical locations where multiple
+	networks connect, leading to multiple correlated failures in case of
+	disaster.  We borrow techniques and data for discovering these
+	physical locations from iPlane~\cite{iplane} and the IXP Mapping
+	Project~\cite{ixps-mapped}.  iPlane clusters IP addresses into PoPs
+	using a combination of DNS-based geolocation and TTL-based distance
+	measurements.  The IXP Mapping project uses public IXP membership
+	datasets, DNS names, looking glass servers, BGP tables, active
+	traceroute and ping measurements, and other sources to provide the
+	most accurate IXP membership datasets available to date.
 
 {\bf Network Security Policy.}
     \begin{itemize}

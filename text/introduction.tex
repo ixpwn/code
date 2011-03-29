@@ -1,47 +1,77 @@
-    The United States government defines {\it critical infrastructure} as ``systems and assets, whether physical or virtual, so vital to the United States that the incapacity or destruction of such systems and assets would have a debilitation impact on security, national economic security, national public health or safety, or any combination of those matters.''~\cite{patriotact}
-    Internet connectivity, a fundamental requirement for modern communication, is undoubtedly such a system.
-    Businesses rely on such connectivity for communication with customers, coordination within their enterprise, and electronic commerce.
-    Governments rely on the Internet for \tbd{blah blah blah, hence Internet resilience is important}.
+The United States government defines {\it critical infrastructure} as ``systems
+and assets, whether physical or virtual, so vital to the United States that the
+incapacity or destruction of such systems and assets would have a debilitation
+impact on security, national economic security, national public health or
+safety, or any combination of those matters.''~\cite{patriotact} Internet
+connectivity, a fundamental requirement for modern communication, is
+undoubtedly such a system.  Businesses rely on such connectivity for
+communication with customers, coordination within their enterprise, and
+electronic commerce.  Governments rely on the Internet for \tbd{blah blah blah,
+hence Internet resilience is important}.
 
-    In this paper, we provide a brief glance at Internet resilience by focusing on a model of Internet Exchange Points, geographic locations where multiple networks converge to interconnect.
-    An attack on one of these exchange points could lead to disconnectivity between the networks who exchange traffic at that location.
-    Building on prior work which develops techniques for identifying formal Internet Exchange Points (IXPs)~\cite{ixps-mapped}, discovering Points of Presence (PoPs)~\cite{iplane}, and pinpointing border routers~\cite{asbrsomething}, we develop an AS connectivity graph that focuses on the locations where peering takes place.
-    We then consider the behavior of an adversary who seeks to maximize damage to this connectivity graph.
-    Such an adversary might wish to disconnect two Tier 1 networks, isolate a large number of networks, or partition a geographic region from the rest of the Internet.
-    We consider each in turn.
+In this paper, we provide a brief glance at Internet resilience by focusing on
+a model of Internet Exchange Points, geographic locations where multiple
+networks converge to interconnect.  An attack on one of these exchange points
+could lead to disconnectivity between the networks who exchange traffic at that
+location.  Building on prior work which develops techniques for identifying
+formal Internet Exchange Points (IXPs)~\cite{ixps-mapped}, discovering Points
+of Presence (PoPs)~\cite{iplane}, and pinpointing border
+routers~\cite{asbrsomething}, we develop an AS connectivity graph that focuses
+on the locations where peering takes place.  We then consider the behavior of
+an adversary who seeks to maximize damage to this connectivity graph.  Such an
+adversary might wish to disconnect two Tier 1 networks, isolate a large number
+of networks, or partition a geographic region from the rest of the Internet.
+We consider each in turn.
 
-    Our results estimate that \ldots
+Our results estimate that \ldots
 
-    We are not the first to evaluate Internet resilience to failures~\cite{michigan, probablymore}. 
-    To the best of our knowledge, our contibutions are twofold.
+We are not the first to evaluate Internet resilience to
+failures~\cite{michigan, probablymore}.  To the best of our knowledge, our
+contibutions are twofold.
 
-            First, we consider physical connectivity points, rather than logical links between networks.
-            Previous work focused on the impact of severing logical links, that is, declaring that two networks had been entirely disconnected. 
-            This overestimates realistic damage in some cases, and underestimates in others.
-            For example, it is highly unlikely that two Tier 1 networks would be partitioned in any single event.
-            These networks have global footprints and connect at multiple physical locations.
-            Thus, disconnecting Tier 1 networks is an overestimate of damage in all scenarios except a coordinated attack.
-            On the other hand, disconnecting single logical links ignores the physical reality that any disaster that strikes a link in shared infrastructure such as an IXP is likely to impact a large number of links.
-            In this case, modeling failure of a single logical link is an underestimate.
-            We argue that focusing on physical connectivity points is a more realistic model of the impact of disaster. 
+First, we consider physical connectivity points, rather than logical links
+between networks.  Previous work focused on the impact of severing logical
+links, that is, declaring that two networks had been entirely disconnected.
+This overestimates realistic damage in some cases, and underestimates in
+others.  For example, it is highly unlikely that two Tier 1 networks would be
+partitioned in any single event.  These networks have global footprints and
+connect at multiple physical locations.  Thus, disconnecting Tier 1 networks is
+an overestimate of damage in all scenarios except a coordinated attack.  On the
+other hand, disconnecting single logical links ignores the physical reality
+that any disaster that strikes a link in shared infrastructure such as an IXP
+is likely to impact a large number of links.  In this case, modeling failure of
+a single logical link is an underestimate.  We argue that focusing on physical
+connectivity points is a more realistic model of the impact of disaster. 
  
-            Second, we consider resilience in an adversarial setting.
-            Recent events in Egypt~\cite{thenews} and other countries involved government intervention to sever Internet access in order to limit communication between revolutionaries and the outside world.
-            Further, the criticality of Internet communication makes it a prime target for terrorist attack.
-            Attacks by any human entity may involve damage to one or more physical locations.
-            Hence, our analysis is a superset of previous work which focused primarily on natural disaster or sideffects from events in a single location.
+Second, we consider resilience in an adversarial setting.  Recent events in
+Egypt~\cite{thenews} and other countries involved government intervention to
+sever Internet access in order to limit communication between revolutionaries
+and the outside world.  Further, the criticality of Internet communication
+makes it a prime target for terrorist attack.  Attacks by any human entity may
+involve damage to one or more physical locations.  Hence, our analysis is a
+superset of previous work which focused primarily on natural disaster or
+sideffects from events in a single location.
 
-    Before we move forward, we clarify the scope of our goals.
-    Valuable evaluations of AS-level connectivity graphs show that traceroute-based topologies like those that we rely upon are in many ways incomplete~\cite{walter}.
-    For instance, policy compliant routing ensures that measurements made with only limited vantage points cannot observe peering relationships between networks where neither network contains a measurement vantage point.
-    Further, `backup links', which are provisioned for the case of failure but otherwise unused, cannot be observed since no traffic flows across these links when the primary links are available. 
-    These and other impediments mean that any analysis over measurement-based graphs may be missing critical information.
-    Thus, the results of our study should not be considered hard and fast projections of Internet connectivity.
-    Instead, we aim only to provide {\it estimates} and {\it bounds} on the impact of attack on Internet infrastructure.
+Before we move forward, we clarify the scope of our goals.  Valuable
+evaluations of AS-level connectivity graphs show that traceroute-based
+topologies like those that we rely upon are in many ways
+incomplete~\cite{walter}.  For instance, policy compliant routing ensures that
+measurements made with only limited vantage points cannot observe peering
+relationships between networks where neither network contains a measurement
+vantage point.  Further, `backup links', which are provisioned for the case of
+failure but otherwise unused, cannot be observed since no traffic flows across
+these links when the primary links are available.  These and other impediments
+mean that any analysis over measurement-based graphs may be missing critical
+information.  Thus, the results of our study should not be considered hard and
+fast projections of Internet connectivity.  Instead, we aim only to provide
+{\it estimates} and {\it bounds} on the impact of attack on Internet
+infrastructure.
 
-    The remainder of the paper is organized as follows. 
-    Section~\ref{sec:connectivity} discusses our dataset and model of the physical connectivity of Internet infrastructure.
-    Section~\ref{sec:algos} provides the algorithms we used in analyzing this model.
-    Section~\ref{sec:results} describes our discoveries from applying these algorithms.
-    Finally, we discuss related work in \S~\ref{sec:relatedwork} and conclude in \S~\ref{sec:conclusion}.
+The remainder of the paper is organized as follows.
+Section~\ref{sec:connectivity} discusses our dataset and model of the physical
+connectivity of Internet infrastructure.  Section~\ref{sec:algos} provides the
+algorithms we used in analyzing this model.  Section~\ref{sec:results}
+describes our discoveries from applying these algorithms.  Finally, we discuss
+related work in \S~\ref{sec:relatedwork} and conclude in
+\S~\ref{sec:conclusion}.
 
