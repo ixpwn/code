@@ -3,8 +3,7 @@ analysis, experience from Internet outages, PoP-level Internet topology
 measurement studies, and network infrastructure security policy.
 
 {\bf Resilience Analysis.}
-
-    Comprehensive analysis of Internet resilience remains beyond reach due to
+     Comprehensive analysis of Internet resilience remains beyond reach due to
     limited access to global routing and topology data.  However, limited
     studies provide insight into the impact of logical link failures and
     opportunities to make the AS graph more robust to these failures.
@@ -21,8 +20,8 @@ measurement studies, and network infrastructure security policy.
     graph.  However, their model focuses on inter-continental connectivity
     rather and does not focus on IXPs as correlated failure points.
 
-    \justine{hey ksteph, can you add a line or two for each of these that
-    provide a direct comparison to what we do and why it's different?} Albert
+    \eat{
+    Albert
     et al.~\cite{resilience-complex-networks} studied two different complex
     networks: Erd\"{o}s-R\'{e}nyi (ER) and scale-free. An ER model produces a
     network with an exponential tail and a scale-free has a power-law tail for
@@ -32,7 +31,7 @@ measurement studies, and network infrastructure security policy.
     deteriorates and the ER model is effected the same as if they were
     randomly removed. This work is different from ours since we created our
     models from actual Internet measurement, which do not necessarily exhibit
-    the power law.
+    the power law.}
     %After reading this, let's make sure to also try to come to some
     %conclusions about the properties of the graph we create.  Note: the
     %Internet does not exhibit the power law!
@@ -40,14 +39,17 @@ measurement studies, and network infrastructure security policy.
     as the degree of nodes in the Internet is known not to follow an ER /or/
     scale-free model (~\cite{first-principles-router-topology}, section
     2). Am I missing something? Or is this just for background information?}
+    \justine{agreed - good to have read it to make sure we weren't missing something but it doesn't sound relevant to the related work. I ate the text so we can put it back if we're missing something.}
 
-    Dolev et al.~\cite{resilience-under-BGP} looked at an AS-level graph based
-    on BGP policy directionality and connectivity. They found that the Internet
-    is much more susceptible to deliberate attacks of removing the AS's with
+    Dolev et al.~\cite{resilience-under-BGP} studied resilience over an AS connectivity graph annotated with
+    on BGP policy relationships. They found that the Internet
+    is much more susceptible to 
+ deliberate attacks of removing the AS's with
     highest degree than previous studies that did not take into consideration
     BGP polices. Our work is different from Dolev et al.'s because we look at
     the physical failure points of the Internet, rather than the logical
     AS-level graph.
+    \justine{Were they before or after the Michigan CoNext paper? Because the Mich. paper included nice metrics and considered policy, too}
     %Their metrics might be useful for us: average shortest path length, size
     %of largest component, number of connected node pairs in the network,
     %ratio between pairs connected and all pairs
@@ -69,11 +71,12 @@ measurement studies, and network infrastructure security policy.
     Southeast Asia with eachother and North America
     disconnected~\cite{asia-comm-quake}.  While the earthquake did not cause
     complete disconnectivity, the affected networks suffered heavy congestion
-    until the cables were repaired.  This experience serves already as a case
+    until the cables were repaired.  This experience served operators as a case
     study for emergency restoration in case of disaster~\cite{taiwan}.
-        
+       
+    \eat{ 
     \justine{agreed wrt the 2003 study, doesn't look as relevant as the Taiwan
-    quake}
+    quake}}
     %\item Restoration study~\cite{taiwan}
 
     %\item 2003 Blackout in Northeastern US and Canada~\cite{blackout2003}.
@@ -114,8 +117,10 @@ measurement studies, and network infrastructure security policy.
     links in our model that will cause us to violate our assumption that each
     administrative entity (organization) is well connected and cannot be
     partitioned.}
+    \justine{Agreed that the Cai work enhances AS level graphs, but (1) the graphs that we have do take in to account AS `sibling' relationships, and (2) I don't think we're planning on focusing on policy? Or are we? Either way I think (1) means we should cut the Cai ref.}
 
 {\bf Network Security Policy.}
+    \justine{cut this section unless we find something more compelling?}
     \begin{itemize}
         \item White House POlicy Review~\cite{cyberspacepolicy} 
     \end{itemize}

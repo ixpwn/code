@@ -13,11 +13,18 @@
 %\usepackage{amsmath, amssymb, amsthm}
 %\usepackage{rotating}
 %\onehalfspacing
-\newcommand{\tbd}[1]{[{\bf{#1}}]}
 
+%COMMENT FOR FINAL VERSION
+\newcommand{\tbd}[1]{[{\bf{#1}}]}
 \newcommand{\justine}[1]{[{\bf justine: {#1}}]}
 \newcommand{\shaddi}[1]{[{\bf shaddi: {#1}}]}
+
+%UNCOMMENT FOR FINAL VERSION
 %\newcommand{\tbd}[1]{}
+%\newcommand{\justine}[1]{}
+%\newcommand{\shaddi}[1]{}
+
+
 \newcommand{\ie}{{\it i.e.}}
 \newcommand{\eg}{{\it e.g.}}
 \newcommand{\eat}[1]{}
@@ -52,9 +59,9 @@
     Internet connectivity is an integral component of modern commerce and
     communication.  Loss of Internet connectivity can shut down industries,
     limit the spread of information, and undermine free speech.  However,
-    physical bottlenecks in the Internet's structure leave it in many cases
-    vulnerable to disconnection.  In this paper, we investigate where these
-    physical bottlenecks lie, leaving network communication susceptible to
+    Internet Exchange Points are somewhat vulnerable targets to interrupt Internet connectivity.
+     In this paper, we investigate where the impact of damage to these 
+    exchange points, leaving network communication susceptible to
     interruption in cases of disaster or direct attack.  Our analysis
     estimates that\ldots
      }
@@ -63,18 +70,9 @@
         \input{introduction}
 
     \section{Connectivity Model}
-        What our data is.
-        How we piece it together.
-        \subsubsection*{Evaluation of Model}
-            \begin{itemize}
-        \item survey random network providers and ask them if what we
-        found was correct
-        \item compare physical links discovered to logical connectivity
-        graph (CAIDA provides this) - what fraction of logical links
-        did we observe? For Tier-1's? For Tier-2's? For stub networks?
-            \end{itemize} 
-
-    \section{Algorithmic Analysis}
+        \input{connectivity_model}
+ 
+   \section{Algorithmic Analysis}
         How we do:
         \begin{enumerate}
             \item Easy peasy: partition Tier-1's
