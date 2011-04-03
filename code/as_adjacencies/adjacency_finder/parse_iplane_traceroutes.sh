@@ -19,12 +19,12 @@ cat $tracefile | while read line
 done    
 
 alltracefile=${1}.${2}.alltraces
-for file in $mytracedir
+for file in $mytracedir/*
     do
-    readouttraces $mytracedir/$file 0 | sed 's/^[^ ]* [^ ]* [^ ]* [^ ]* //g' >>$alltracefile 
+    readouttraces $file 0 | sed 's/^[^ ]* [^ ]* [^ ]* [^ ]* //g' >>$alltracefile 
 done
 
-#rm -r $mytracedir
+rm -r $mytracedir
 
 adjacencydir=~/tmpdir/as_adjacencies/
 javac FindBorderRouters.java
