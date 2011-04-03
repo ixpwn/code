@@ -24,11 +24,12 @@ public class ASMap {
 				assert(nextline.length == 2);
 				
 				Prefix pfx = new Prefix(nextline[0]);
+				if(pfx.isPrivate()) continue;
 				int ASN = 0;
 				try{
 					ASN = Integer.parseInt(nextline[1].split("_")[0]);
 				}catch(NumberFormatException e){
-					System.out.println(Arrays.toString(nextline));
+					//System.err.println(Arrays.toString(nextline));
 					continue;
 				}
 				PrefixNode curNode = root;
@@ -41,7 +42,7 @@ public class ASMap {
 						curNode = curNode.zero;
 					}
 					if(curNode.pfx != null){
-						System.out.println(pfx + " " + curNode.pfx);
+						//System.out.println(i + " " + pfx + " " + curNode.pfx + " " + pfx.bitString() + " " + curNode.pfx.bitString());
 						assert(curNode.pfx.isMatch(pfx.getipAddress()));
 					}
 				}
@@ -76,9 +77,13 @@ public class ASMap {
 						assert(curNode.pfx.isMatch(pfx.getipAddress()));
 						bestASN = curNode.ASN;
 					}
-					System.out.println(i + " " + pfx.getBit(i) + " " + bestASN);
+					//System.out.println(i + " " + pfx.getBit(i) + " " + bestASN);
 				}
-				//assert(bestASN != 0);
+				/*if(bestASN == 0){
+					System.err.println("Unable to map: " + pfx);
+				}else{
+					System.err.println("Mapped " + pfx + " to " + bestASN);
+				}*/
 				return bestASN;
 			}
 		}

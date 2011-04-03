@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Cool kids write their own IP Address classes rather than using the Java built-ins.
  * @author justine@eecs.berkeley.edu
@@ -29,6 +32,11 @@ public class Prefix implements Comparable<Prefix>{
 		this.prefix = prefix;
 	}
 	
+	private Prefix(int ip){
+		this.ipAddress = ip;
+		this.prefix = 32;
+	}
+	
 	public int getipAddress(){
 		return ipAddress;
 	}
@@ -38,10 +46,13 @@ public class Prefix implements Comparable<Prefix>{
 	}
 	
 	public boolean isMatch(int address){
-		return ((address ^ ipAddress) << (32 - prefix)) == 0;
+		//System.out.println("YOOO: " + toString() + " " + ntoa(address) + " "   + new Prefix((address ^ ipAddress)).bitString());
+		//for(int i = 31; i >= 0; i--){
+		//	System.out.println(i + " " + new Prefix((address ^ ipAddress) >> (32 - i)).bitString());
+		//}
+		return ((address ^ ipAddress) >> (32 - prefix)) == 0;
 	}
 
-	//network order is big-endian, java is little-endian, oh well fuck.
 	public static int aton(String ip){
 		//System.out.println(ip);
 		int ipAddress = 0;
@@ -51,7 +62,9 @@ public class Prefix implements Comparable<Prefix>{
 			String octet = octets[i];
 			int c = Integer.parseInt(octet);
 			if(c > 255) throw new IllegalArgumentException(ip + " is not an IP address!");
-			ipAddress += (c << (i * 8)); 
+			//System.out.println(i * 8);
+			//System.out.println(ipAddress);
+			ipAddress = ipAddress | (c << (((3-i) * 8))); 
 		}
 		return ipAddress;
 	}
@@ -59,9 +72,9 @@ public class Prefix implements Comparable<Prefix>{
 	public static String ntoa(int ip){
 		String address = "";
 		for(int i = 0; i < 4; i++){
-			address = address + (ip & 0x000000FF);
+			address = (ip & 0x000000FF) + address;
 			ip = ip >>> 8;
-			if(i < 3) address = address + ".";
+			if(i < 3) address = "." + address;
 		}
 		return address;
 	}
@@ -70,12 +83,34 @@ public class Prefix implements Comparable<Prefix>{
 		//System.out.println(idx/8);
 		if(idx > prefix) throw new IllegalArgumentException("You suck!");
 		//return Math.abs((ipAddress >>> (idx)) % 2);
-		return Math.abs(((ipAddress >>> ((idx / 8) * 8)) >>> (7 - (idx % 8))) % 2);
+		return (int) Math.abs(((ipAddress >>> (31 - idx)) % 2));
+		//return Math.abs(((ipAddress >>> ((idx / 8) * 8)) >>> (7 - (idx % 8))) % 2);
 	}
 	
 	public boolean equals(Prefix other){
 		if(other == null) return false;
 		return isMatch(other.ipAddress) && this.prefix == other.prefix;
+	}
+	
+	public String bitString(){
+		String s = "";
+		for(int i = 0; i < prefix; i++){
+			s += getBit(i);
+			if(i % 8 == 7) s += " "; 
+		}
+		return s;
+	}
+	
+	public boolean isPrivate(){
+		if(new Prefix("10.0.0.0/8").isMatch(this.ipAddress)){
+			return true;
+		}else if(new Prefix("172.16.0.0/12").isMatch(this.ipAddress)){
+			return true;
+		}else if(new Prefix("192.168.0.0/16").isMatch(this.ipAddress)){
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public String toString(){
