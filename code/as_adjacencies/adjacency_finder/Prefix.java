@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Cool kids write their own IP Address classes rather than using the Java built-ins.
@@ -80,11 +78,8 @@ public class Prefix implements Comparable<Prefix>{
 	}
 	
 	public int getBit(int idx){
-		//System.out.println(idx/8);
 		if(idx > prefix) throw new IllegalArgumentException("You suck!");
-		//return Math.abs((ipAddress >>> (idx)) % 2);
 		return (int) Math.abs(((ipAddress >>> (31 - idx)) % 2));
-		//return Math.abs(((ipAddress >>> ((idx / 8) * 8)) >>> (7 - (idx % 8))) % 2);
 	}
 	
 	public boolean equals(Prefix other){
