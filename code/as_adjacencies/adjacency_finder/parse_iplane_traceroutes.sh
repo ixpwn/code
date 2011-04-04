@@ -14,20 +14,21 @@ mytracedir=~/tmpdir/${1}.${2}.iplane
 mkdir $mytracedir
 cat $tracefile | while read line
     do
-    wget $dirurl/$line -O $mytracedir/$line
+    wget $dirurl/$line -O $mytracedir/$line 2>/dev/null >/dev/null
     gunzip $mytracedir/$line
 done    
 
 alltracefile=~/tmpdir/${1}.${2}.alltraces
 for file in $mytracedir/*
     do
-    readouttraces $file 0 | sed 's/^[^ ]* [^ ]* [^ ]* [^ ]* //g' >>$alltracefile 
+    echo $file
+    ~/tools/readouttraces $file 0 | sed 's/^[^ ]* [^ ]* [^ ]* [^ ]* //g' >>$alltracefile 
 done
 
 rm -r $mytracedir
 
 adjacencydir=~/tmpdir/as_adjacencies/
 javac FindBorderRouters.java
-java -ea FindBorderRouters origin_as_mapping.txt ip_to_as_mapping.txt $alltracefile >>$adjacencydir/${1}.${2}.adjacencies
+java -ea FindBorderRouters origin_as_mapping.txt ip_to_as_mapping.txt $alltracefile | sort -u >>$adjacencydir/${1}.${2}.adjacencies
 
 rm $alltracefile

@@ -24,8 +24,7 @@ public class FindBorderRouters {
 			while(traceroute.hasNext()){
 				String curIP = traceroute.next().trim();
 				if(lastprint){
-					System.out.print(curIP);
-					System.out.println("]");
+					System.out.println(" " + curIP + "]");
 				}
 				
 				lastprint = false;
