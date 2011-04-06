@@ -22,15 +22,8 @@ for line in fileinput.input():
     try:
         # make sure all of bubba[pop] has same lat/long
         bubba[pop].append([ip, pop, lat, lng])
-        for item in bubba[pop]:
-            if item[2] > 180: # fix unknown entries
-                #print "fixing %s" % pop
-                item[2] = lat
-                item[3] = lng
-            else:
-                if item[2] != lat or item[3] != lng:
-                    print "error! mismatch of lat/long! existing: %s, %s new: %s, %s" % (item[0],item[1],ip,pop) 
-                    exit()
+        if not lat > 180 and not lng > 180:
+            map(lambda x: fix_single_pop(x, lat, lng), bubba[pop])
     except KeyError:
         # we haven't seen this pop before
         bubba[pop] = list()
