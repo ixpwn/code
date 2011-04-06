@@ -39,17 +39,19 @@ measurement studies, and network infrastructure security policy.
     as the degree of nodes in the Internet is known not to follow an ER /or/
     scale-free model (~\cite{first-principles-router-topology}, section
     2). Am I missing something? Or is this just for background information?}
-    \justine{agreed - good to have read it to make sure we weren't missing something but it doesn't sound relevant to the related work. I ate the text so we can put it back if we're missing something.}
+    \justine{agreed - good to have read it to make sure we weren't missing
+    something but it doesn't sound relevant to the related work. I ate the text
+    so we can put it back if we're missing something.}
 
-    Dolev et al.~\cite{resilience-under-BGP} studied resilience over an AS connectivity graph annotated with
-    on BGP policy relationships. They found that the Internet
-    is much more susceptible to 
- deliberate attacks of removing the AS's with
-    highest degree than previous studies that did not take into consideration
-    BGP polices. Our work is different from Dolev et al.'s because we look at
-    the physical failure points of the Internet, rather than the logical
-    AS-level graph.
-    \justine{Were they before or after the Michigan CoNext paper? Because the Mich. paper included nice metrics and considered policy, too}
+    Dolev et al.~\cite{resilience-under-BGP} studied resilience over an AS
+    connectivity graph annotated with on BGP policy relationships. They found
+    that the Internet is much more susceptible to deliberate attacks of
+    removing the AS's with highest degree than previous studies that did not
+    take into consideration BGP polices. Our work is different from Dolev et
+    al.'s because we look at the physical failure points of the Internet,
+    rather than the logical AS-level graph.  \justine{Were they before or after
+    the Michigan CoNext paper? Because the Mich. paper included nice metrics
+    and considered policy, too}
     %Their metrics might be useful for us: average shortest path length, size
     %of largest component, number of connected node pairs in the network,
     %ratio between pairs connected and all pairs
@@ -97,27 +99,29 @@ measurement studies, and network infrastructure security policy.
     %without compensation.
 
 {\bf PoP-level Internet Topologies.}  Our model for network connectivity
-    focuses on {\it failure points}, physical locations where multiple
-    networks connect, leading to multiple correlated failures in case of
-    disaster.  We borrow techniques and data for discovering these
-    physical locations from iPlane~\cite{iplane} and the IXP Mapping
-    Project~\cite{ixps-mapped}.  iPlane clusters IP addresses into PoPs
-    using a combination of DNS-based geolocation and TTL-based distance
-    measurements.  The IXP Mapping project uses public IXP membership
-    datasets, DNS names, looking glass servers, BGP tables, active
-    traceroute and ping measurements, and other sources to provide the
-    most accurate IXP membership datasets available to date. Cai et al.  propose
-    an organization-based model of the Internet that takes into account the fact
-    that a single organization may control multiple ASes~\cite{as-to-org}. While
-    our analysis here treats each AS as an individual organization, the
-    techniques we use easily generalize to a topology model that accurately
-    incorporates these relationships. \shaddi{I think this means that our model
-    /underestimates/ the degree of resilience, but that's going to depend on
-    what our graph looks like.I'd imagine that there are going to be missing AS
-    links in our model that will cause us to violate our assumption that each
-    administrative entity (organization) is well connected and cannot be
-    partitioned.}
-    \justine{Agreed that the Cai work enhances AS level graphs, but (1) the graphs that we have do take in to account AS `sibling' relationships, and (2) I don't think we're planning on focusing on policy? Or are we? Either way I think (1) means we should cut the Cai ref.}
+    focuses on {\it failure points}, physical locations where multiple networks
+    connect, leading to multiple correlated failures in case of disaster.  We
+    borrow techniques and data for discovering these physical locations from
+    iPlane~\cite{iplane} and the IXP Mapping Project~\cite{ixps-mapped}.
+    iPlane clusters IP addresses into PoPs using a combination of DNS-based
+    geolocation and TTL-based distance measurements.  The IXP Mapping project
+    uses public IXP membership datasets, DNS names, looking glass servers, BGP
+    tables, active traceroute and ping measurements, and other sources to
+    provide the most accurate IXP membership datasets available to date. Cai et
+    al.  propose an organization-based model of the Internet that takes into
+    account the fact that a single organization may control multiple
+    ASes~\cite{as-to-org}. While our analysis here treats each AS as an
+    individual organization, the techniques we use easily generalize to a
+    topology model that accurately incorporates these relationships.  \shaddi{I
+    think this means that our model /underestimates/ the degree of resilience,
+    but that's going to depend on what our graph looks like.I'd imagine that
+    there are going to be missing AS links in our model that will cause us to
+    violate our assumption that each administrative entity (organization) is
+    well connected and cannot be partitioned.} \justine{Agreed that the Cai
+    work enhances AS level graphs, but (1) the graphs that we have do take in
+    to account AS `sibling' relationships, and (2) I don't think we're planning
+    on focusing on policy? Or are we? Either way I think (1) means we should
+    cut the Cai ref.}
 
 {\bf Network Security Policy.}
     \justine{cut this section unless we find something more compelling?}
