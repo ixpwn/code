@@ -128,6 +128,8 @@ def getLatLng(city, country, http)
     lat = $1
     lng = $2
   end
+
+  sleep 1 #Sleep a second so that Google doesn't rate limit me
   
   if lat == "" or lng == ""
     puts "TROUBLE! #{request}"
@@ -200,7 +202,7 @@ briceFile.each{ |line|
         map_ixp_fp[ixp_id] = fp_id
       else
         puts "BAD CITY COUNTRY Brice:(#{city}) (#{country}) #{line}"
-        exit
+        break
       end
     end
   else
