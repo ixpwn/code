@@ -131,6 +131,8 @@ def getLatLng(city, country, http)
   
   if lat == "" or lng == ""
     LatLng.new(-200,-200)
+    puts "TROUBLE! #{request}"
+    puts response.body
   else
     LatLng.new(lat.to_f.round, lng.to_f.round)
   end
