@@ -1,3 +1,5 @@
+\justine{todo:~\cite{poplevelconnect}}
+
 Our work builds on and takes inspiration from research in Internet resilience
 analysis, experience from Internet outages, PoP-level Internet topology
 measurement studies, and network infrastructure security policy.
@@ -46,19 +48,13 @@ measurement studies, and network infrastructure security policy.
     the sake of diligence put it in.}
     }
 
-    \kristin{Ate entire text and discussion about ER and scale-free networks. I
-    do want to note that we should take some time to see if we can determine any
-    properites about the graph we create.}
-
     Dolev et al.~\cite{resilience-under-BGP} studied resilience over an AS
     connectivity graph annotated with BGP policy relationships. They found that
     the Internet is much more susceptible to deliberate attacks of removing the
     AS's with highest degree than previous studies that did not take into
     consideration BGP polices. Our work is different from Dolev et al.'s because
     we look at the physical failure points of the Internet, rather than the
-    logical AS-level graph.  \justine{Were they before or after the Michigan
-    CoNext paper? Because the Mich. paper included nice metrics and considered
-    policy, too} \kristin{They were the year before according to the bib.}
+    logical AS-level graph. \justine{todo: compare to Mich.} 
     %Their metrics might be useful for us: average shortest path length, size
     %of largest component, number of connected node pairs in the network,
     %ratio between pairs connected and all pairs
@@ -81,14 +77,9 @@ measurement studies, and network infrastructure security policy.
     While the earthquake did not cause complete disconnectivity, the affected
     networks suffered heavy congestion until the cables were repaired.  This
     experience served operators as a case study for emergency restoration in
-    case of disaster~\cite{taiwan}.  \kristin{We've got mention the latest
-    earthquake in Japan. Scanning headlines from a Google search, it looks like
-    Japan's Internet was barely effected. But I think it'll look odd if we don't
-    mention it.}
+    case of disaster~\cite{taiwan}.  \kristin{todo: We've got mention the latest
+    earthquake in Japan.}
        
-    \eat{ 
-    \justine{agreed wrt the 2003 study, doesn't look as relevant as the Taiwan
-    quake}}
     %\item Restoration study~\cite{taiwan}
 
     %\item 2003 Blackout in Northeastern US and Canada~\cite{blackout2003}.
@@ -120,24 +111,24 @@ measurement studies, and network infrastructure security policy.
     provide the most accurate IXP membership datasets available to date.
 
     \eat{Cai et
-    al.  propose an organization-based model of the Internet that takes into
-    account the fact that a single organization may control multiple
-    ASes~\cite{as-to-org}. While our analysis here treats each AS as an
-    individual organization, the techniques we use easily generalize to a
-    topology model that accurately incorporates these relationships.  \shaddi{I
-    think this means that our model /underestimates/ the degree of resilience,
-    but that's going to depend on what our graph looks like.I'd imagine that
-    there are going to be missing AS links in our model that will cause us to
-    violate our assumption that each administrative entity (organization) is
-    well connected and cannot be partitioned.} \justine{Agreed that the Cai
-    work enhances AS level graphs, but (1) the graphs that we have do take in
-    to account AS `sibling' relationships, and (2) I don't think we're planning
-    on focusing on policy? Or are we? Either way I think (1) means we should
-    cut the Cai ref.} \kristin{I agree and have eatten it}
-    }
+        al.  propose an organization-based model of the Internet that takes into
+        account the fact that a single organization may control multiple
+        ASes~\cite{as-to-org}. While our analysis here treats each AS as an
+        individual organization, the techniques we use easily generalize to a
+        topology model that accurately incorporates these relationships.  \shaddi{I
+        think this means that our model /underestimates/ the degree of resilience,
+        but that's going to depend on what our graph looks like.I'd imagine that
+        there are going to be missing AS links in our model that will cause us to
+        violate our assumption that each administrative entity (organization) is
+        well connected and cannot be partitioned.} \justine{Agreed that the Cai
+        work enhances AS level graphs, but (1) the graphs that we have do take in
+        to account AS `sibling' relationships, and (2) I don't think we're planning
+        on focusing on policy? Or are we? Either way I think (1) means we should
+        cut the Cai ref.} \kristin{I agree and have eatten it}
 
-{\bf Network Security Policy.}
-    \justine{cut this section unless we find something more compelling?}
-    \begin{itemize}
-        \item White House POlicy Review~\cite{cyberspacepolicy} 
-    \end{itemize}
+        {\bf Network Security Policy.}
+        \justine{cut this section unless we find something more compelling?}
+        \begin{itemize}
+            \item White House POlicy Review~\cite{cyberspacepolicy} 
+        \end{itemize}
+    }
