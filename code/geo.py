@@ -19,6 +19,8 @@ cat ixp-list.txt | perl -pe 's/\t+/,/g' | cut -f1,4,5 -d"," | grep "," | xargs
 
 You can trivially modify this to take any location string as an argument and
 spit out the lat/long to full degree precision using the Gmaps API.
+
+geo.py RULEZ, create_loc_pop_brice.rb DROOLZ!!!
 '''
 
 root_url = "http://maps.google.com/maps/geo?"
