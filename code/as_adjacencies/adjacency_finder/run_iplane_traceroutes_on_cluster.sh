@@ -1,8 +1,9 @@
 #!/bin/bash
 
-rnodes='r21 r22 r23 r24'
+rnodes='r22 r23 r24 r25 r26 r27 r28 r29'
+month='07'
 
-for i in {1..5}
+for i in {1..31}
 do 
     i=`printf %02d $i`
     ran=0
@@ -12,9 +13,9 @@ do
             do
             if [ `echo "ps aux | grep parse_iplane | grep -v grep | wc -l" | ssh ${rnode}.millennium.berkeley.edu` -eq 0 ] 
                 then
-                echo "cd $(pwd); echo './parse_iplane_traceroutes.sh 06 $i 2>>$i.$rnode.log 1>>$i.$rnode.log' | at now" | ssh $rnode
-                echo "running now!" | mail -s "IPLANE PARSING FOR 6/$i RUNNING ON $rnode" justine@cs.berkeley.edu 
-                echo "IPLANE PARSING FOR 6/$i RUNNING ON $rnode" 
+                echo "cd $(pwd); echo './parse_iplane_traceroutes.sh $month $i 2>>$month.$i.$rnode.log 1>>$month.$i.$rnode.log' | at now" | ssh $rnode
+                echo "running now!" | mail -s "IPLANE PARSING FOR $month/$i RUNNING ON $rnode" justine@cs.berkeley.edu 
+                echo "IPLANE PARSING FOR $month/$i RUNNING ON $rnode" 
                 ran=1
                 break
             fi 
