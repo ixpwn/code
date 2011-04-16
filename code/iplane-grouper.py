@@ -1,6 +1,17 @@
 import sys
 import fileinput
 
+''' 
+This script runs through the ip_to_pop_with_latlons.txt file from iPlane and
+tries to fill in missing location entries by checking to see if there are any
+IPs in the same POP for which we already know the location (i.e., if we don't
+know A's location, but it's in the same POP as some address B for which we know
+the location, we can set A's location to that of B).
+
+It also checks to see if we have conflicting locations for a particular POP
+(which would be "bad").
+'''
+
 bubba = {} # a queensland grouper famous as the first fish to undergo chemo
 
 def fix_single_pop(item, lat, lng):

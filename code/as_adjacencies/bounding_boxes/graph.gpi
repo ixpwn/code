@@ -1,0 +1,22 @@
+#set terminal aqua 1 fsize 32
+#set terminal postscript "Times-Roman" 24
+set terminal postscript enhanced color "Helvetica" 16
+#set terminal postscript eps color "Helvetica" 18
+#set key bottom right
+#set key width 3
+#set size ratio 0.5
+set key right top
+set grid
+#set xrange [.5:8]
+#set xtics (.5,1,2,4,8)
+#set yrange [.00001:1]
+#set ytics (.00001,.0001,.001,.01, .1, 1)
+set log x
+#set log y
+set xlabel "Area of Bounding Box"
+set ylabel "1 - Fraction of TTL Clusters" 
+set output "graph.eps"
+
+
+plot 'szes.ccdf' with lines lw 4
+
