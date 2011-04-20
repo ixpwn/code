@@ -14,7 +14,7 @@ WEBLOCATION =
 
 
 
-all: standard
+all: pdflatex
 
 standard: 
 	make bbl
@@ -34,7 +34,8 @@ pdf:
 	ps2pdf -dEmbedAllFonts=true -dCompatibilityLevel=1.4 $(PSFILE) $(PDFFILE)
 
 pdflatex: clean
-	pdflatex $(ROOTNAME)
+	pdflatex $(ROOTNAME) 
+	bibtex $(ROOTNAME)
 	pdflatex $(ROOTNAME)
 	pdflatex $(ROOTNAME)
 	
