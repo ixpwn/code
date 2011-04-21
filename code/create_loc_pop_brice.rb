@@ -129,14 +129,14 @@ def getLatLng(city, country, http)
     lng = $2
   end
 
-  sleep 1 #Sleep a second so that Google doesn't rate limit me
+  sleep 0.5 #Sleep a second so that Google doesn't rate limit me
   
   if lat == "" or lng == ""
     puts "TROUBLE! #{request}"
     puts response.body
     LatLng.new(-200,-200)
   else
-    LatLng.new(lat.to_f.round, lng.to_f.round)
+    LatLng.new(lat.to_f, lng.to_f)
   end
 end
 
@@ -165,8 +165,8 @@ def getCityCountry(latlng, http)
 end
 
 def LatLongToString(latlng)
-  lat = "#{latlng.lat + 90}"
-  lng = "#{latlng.lng + 180}"
+  lat = "#{latlng.lat.round + 90}"
+  lng = "#{latlng.lng.round + 180}"
 
   if lat.size < 3
     (3 - lat.size).times{ lat = '0'+lat }
