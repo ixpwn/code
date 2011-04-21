@@ -41,7 +41,7 @@ while i < ARGV.size
   elsif ARGV[i] == '-j'
     justineFilename = ARGV[i+1]
   elsif ARGV[i] == '-o'
-    outHeader = "#{ARGV[i+1]}"
+    outHeader = "#{ARGV[i+1]}_"
   elsif ARGV[i] == '-l'
     fpLocFilename = ARGV[i+1]
   end
@@ -290,7 +290,7 @@ if cdfED
   fname = "cdf_ed"
   puts "  making #{fname}"
   aryEDist.sort!{|a,b| a.edit <=> b.edit}
-  output = File.new("#{outHeader}_#{fname}.data", "w+")
+  output = File.new("#{outHeader}#{fname}.data", "w+")
   c = 0.0
   size = aryEDist.size
   aryEDist.each{|e|
@@ -301,12 +301,12 @@ if cdfED
 
   gnu = Kernel.open("| gnuplot", "w+")
   gnu.puts "set terminal postscript eps color font \"Times, 22\""
-  gnu.puts "set output \"#{outHeader}_#{fname}.ps\""
+  gnu.puts "set output \"#{outHeader}#{fname}.ps\""
   gnu.puts "set title \"Best Edit Distance between a Justine to Brice failure point\""
   gnu.puts "set xlabel \"Edit Distance\""
   gnu.puts "set ylabel \"CDF\""
   gnu.puts "set logscale x"
-  plot = "plot \"#{outHeader}_#{fname}.data\" using 1:2 with lines notitle"
+  plot = "plot \"#{outHeader}#{fname}.data\" using 1:2 with lines notitle"
   gnu.puts plot
   gnu.close
 end
@@ -315,7 +315,7 @@ if cdfGD
   fname = "cdf_gd"
   puts "  making #{fname}"
   aryGDist.sort!{|a,b| a.geo <=> b.geo}
-  output = File.new("#{outHeader}_#{fname}.data", "w+")
+  output = File.new("#{outHeader}#{fname}.data", "w+")
   c = 0.0
   size = aryGDist.size
   aryGDist.each{|e|
@@ -326,12 +326,12 @@ if cdfGD
 
   gnu = Kernel.open("| gnuplot", "w+")
   gnu.puts "set terminal postscript eps color font \"Times, 22\""
-  gnu.puts "set output \"#{outHeader}_#{fname}.ps\""
+  gnu.puts "set output \"#{outHeader}#{fname}.ps\""
   gnu.puts "set title \"Best Geo Distance between a Justine to Brice failure point\""
   gnu.puts "set xlabel \"Geo Distance (miles)\""
   gnu.puts "set ylabel \"CDF\""
   gnu.puts "set logscale x"
-  plot = "plot \"#{outHeader}_#{fname}.data\" using 1:2 with lines notitle"
+  plot = "plot \"#{outHeader}#{fname}.data\" using 1:2 with lines notitle"
   gnu.puts plot
   gnu.close
 end
@@ -340,7 +340,7 @@ if cdfGDofED
   fname = "cdf_gd_of_ed"
   puts "  making #{fname}"
   aryEDist.sort!{|a,b| a.geo <=> b.geo}
-  output = File.new("#{outHeader}_#{fname}.data", "w+")
+  output = File.new("#{outHeader}#{fname}.data", "w+")
   c = 0.0
   size = aryEDist.size
   aryEDist.each{|e|
@@ -351,11 +351,11 @@ if cdfGDofED
 
   gnu = Kernel.open("| gnuplot", "w+")
   gnu.puts "set terminal postscript eps color font \"Times, 22\""
-  gnu.puts "set output \"#{outHeader}_#{fname}.ps\""
+  gnu.puts "set output \"#{outHeader}#{fname}.ps\""
   gnu.puts "set title \"Geo Distance of Best Edit Distance\""
   gnu.puts "set xlabel \"Geo Distance (miles)\""
   gnu.puts "set ylabel \"CDF\""
-  plot = "plot \"#{outHeader}_#{fname}.data\" using 1:2 with lines notitle"
+  plot = "plot \"#{outHeader}#{fname}.data\" using 1:2 with lines notitle"
   gnu.puts plot
   gnu.close
 end
@@ -364,7 +364,7 @@ if cdfEDofGD
   fname = "cdf_ed_of_gd"
   puts "  making #{fname}"
   aryGDist.sort!{|a,b| a.edit <=> b.edit}
-  output = File.new("#{outHeader}_#{fname}.data", "w+")
+  output = File.new("#{outHeader}#{fname}.data", "w+")
   c = 0.0
   size = aryGDist.size
   aryGDist.each{|e|
@@ -375,11 +375,11 @@ if cdfEDofGD
 
   gnu = Kernel.open("| gnuplot", "w+")
   gnu.puts "set terminal postscript eps color font \"Times, 22\""
-  gnu.puts "set output \"#{outHeader}_#{fname}.ps\""
+  gnu.puts "set output \"#{outHeader}#{fname}.ps\""
   gnu.puts "set title \"Edit Distance of Best Geo Distance\""
   gnu.puts "set xlabel \"Edit Distance\""
   gnu.puts "set ylabel \"CDF\""
-  plot = "plot \"#{outHeader}_#{fname}.data\" using 1:2 with lines notitle"
+  plot = "plot \"#{outHeader}#{fname}.data\" using 1:2 with lines notitle"
   gnu.puts plot
   gnu.close
 end
@@ -387,7 +387,7 @@ end
 if scatterGDvsED
   fname = "scatter_gd_ed"
   puts "  making #{fname}"
-  output = File.new("#{outHeader}_#{fname}.data", "w+")
+  output = File.new("#{outHeader}#{fname}.data", "w+")
   c = 0.0
   size = aryEDist.size
   aryEDist.each{|e|
@@ -398,12 +398,12 @@ if scatterGDvsED
 
   gnu = Kernel.open("| gnuplot", "w+")
   gnu.puts "set terminal postscript eps color font \"Times, 22\""
-  gnu.puts "set output \"#{outHeader}_#{fname}.ps\""
+  gnu.puts "set output \"#{outHeader}#{fname}.ps\""
   gnu.puts "set title \"Geo Distance of Best Edit Distance\""
   gnu.puts "set xlabel \"Edit Distance (with jitter)\""
   gnu.puts "set ylabel \"Geo Distance (miles)\""
   gnu.puts "set logscale x"
-  plot = "plot \"#{outHeader}_#{fname}.data\" using 1:2 notitle"
+  plot = "plot \"#{outHeader}#{fname}.data\" using 1:2 notitle"
   gnu.puts plot
   gnu.close
 end
@@ -411,7 +411,7 @@ end
 if scatterEDvsGD
   fname = "scatter_ed_gd"
   puts "  making #{fname}"
-  output = File.new("#{outHeader}_#{fname}.data", "w+")
+  output = File.new("#{outHeader}#{fname}.data", "w+")
   c = 0.0
   size = aryGDist.size
   aryGDist.each{|e|
@@ -422,13 +422,13 @@ if scatterEDvsGD
 
   gnu = Kernel.open("| gnuplot", "w+")
   gnu.puts "set terminal postscript eps color font \"Times, 22\""
-  gnu.puts "set output \"#{outHeader}_#{fname}.ps\""
+  gnu.puts "set output \"#{outHeader}#{fname}.ps\""
   gnu.puts "set title \"Edit Distance of Best Geo Distance\""
   gnu.puts "set xlabel \"Geo Distance (miles)\""
   gnu.puts "set ylabel \"Edit Distance (with jitter)\""
   gnu.puts "set logscale x"
   gnu.puts "set logscale y"
-  plot = "plot \"#{outHeader}_#{fname}.data\" using 1:2 notitle"
+  plot = "plot \"#{outHeader}#{fname}.data\" using 1:2 notitle"
   gnu.puts plot
   gnu.close
 end
@@ -437,7 +437,7 @@ if cdfFPDegree
   fname = "cdf_fp_degree"
   puts "  making #{fname}"
   aryJFPDegree.sort!{|a,b| a.degree <=> b.degree}
-  outputJ = File.new("#{outHeader}_#{fname}_j.data", "w+")
+  outputJ = File.new("#{outHeader}#{fname}_j.data", "w+")
   c = 0.0
   size = aryJFPDegree.size
   aryJFPDegree.each{|e|
@@ -447,7 +447,7 @@ if cdfFPDegree
   outputJ.close
 
   aryBFPDegree.sort!{|a,b| a.degree <=> b.degree}
-  outputB = File.new("#{outHeader}_#{fname}_b.data", "w+")
+  outputB = File.new("#{outHeader}#{fname}_b.data", "w+")
   c = 0.0
   size = aryBFPDegree.size
   aryBFPDegree.each{|e|
@@ -458,14 +458,14 @@ if cdfFPDegree
 
   gnu = Kernel.open("| gnuplot", "w+")
   gnu.puts "set terminal postscript eps color font \"Times, 22\""
-  gnu.puts "set output \"#{outHeader}_#{fname}.ps\""
+  gnu.puts "set output \"#{outHeader}#{fname}.ps\""
   gnu.puts "set title \"Failure Point Degree\""
   gnu.puts "set xlabel \"Failure Point Degree\""
   gnu.puts "set ylabel \"CDF\""
   gnu.puts "set logscale x"
-  plot = "plot \"#{outHeader}_#{fname}_j.data\" using 1:2 with lines "
+  plot = "plot \"#{outHeader}#{fname}_j.data\" using 1:2 with lines "
   plot << "title \"Justine data\""
-  plot << ", \"#{outHeader}_#{fname}_b.data\" using 1:2 with lines "
+  plot << ", \"#{outHeader}#{fname}_b.data\" using 1:2 with lines "
   plot << "title \"Brice data\""
   gnu.puts plot
   gnu.close
@@ -475,7 +475,7 @@ if cdfASDegree
   fname = "cdf_as_degree"
   puts "  making #{fname}"
   aryJASDegree.sort!{|a,b| a.degree <=> b.degree}
-  outputJ = File.new("#{outHeader}_#{fname}_j.data", "w+")
+  outputJ = File.new("#{outHeader}#{fname}_j.data", "w+")
   c = 0.0
   size = aryJASDegree.size
   aryJASDegree.each{|e|
@@ -485,7 +485,7 @@ if cdfASDegree
   outputJ.close
 
   aryBASDegree.sort!{|a,b| a.degree <=> b.degree}
-  outputB = File.new("#{outHeader}_#{fname}_b.data", "w+")
+  outputB = File.new("#{outHeader}#{fname}_b.data", "w+")
   c = 0.0
   size = aryBASDegree.size
   aryBASDegree.each{|e|
@@ -496,14 +496,14 @@ if cdfASDegree
 
   gnu = Kernel.open("| gnuplot", "w+")
   gnu.puts "set terminal postscript eps color font \"Times, 22\""
-  gnu.puts "set output \"#{outHeader}_#{fname}.ps\""
+  gnu.puts "set output \"#{outHeader}#{fname}.ps\""
   gnu.puts "set title \"AS Degree\""
   gnu.puts "set xlabel \"AS Degree\""
   gnu.puts "set ylabel \"CDF\""
   gnu.puts "set logscale x"
-  plot = "plot \"#{outHeader}_#{fname}_j.data\" using 1:2 with lines "
+  plot = "plot \"#{outHeader}#{fname}_j.data\" using 1:2 with lines "
   plot << "title \"Justine data\""
-  plot << ", \"#{outHeader}_#{fname}_b.data\" using 1:2 with lines "
+  plot << ", \"#{outHeader}#{fname}_b.data\" using 1:2 with lines "
   plot << "title \"Brice data\""
   gnu.puts plot
   gnu.close
