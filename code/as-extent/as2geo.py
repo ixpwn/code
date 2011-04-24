@@ -1,10 +1,14 @@
 '''
 Given an ASN, this will determine its geographic extent. For now, this means
 running a sample of IPs from the AS's advertised prefixes against MaxMind, and
-then spitting out a kml that shows the location of each geoloc'd IP address.
+then spitting out a file that shows the location of each geoloc'd IP address in
+the following format:
+
+<asn> <lat> <lon> <ip>
 
 TODO: Figure out how to actually represent "geographic extent" in a meaningful
-way. Probably bounding polygons with some separation threshold...
+way. Probably bounding polygons with some separation threshold... Maybe output
+kml.
 '''
 import sys
 import argparse
@@ -142,7 +146,7 @@ parser = argparse.ArgumentParser(description="Determines the geographic extent o
 parser.add_argument("-g", "--geodb", help="MaxMind Geolocation DB, uses \
 GeoLiteCity.dat in local folder by default")
 parser.add_argument("-b", "--bgptable", required=True, help="BGP Table file")
-parser.add_argument("-o", "--output", help="kml output file location")
+parser.add_argument("-o", "--output", help="output file location")
 parser.add_argument("-s", "--sample_size", help="Percent of addresses to sample (default: 0.05)")
 #parser.add_argument("-m", "--max_sample", help="Maximum number of addresses to sample from an AS")
 args = parser.parse_args()
@@ -154,7 +158,7 @@ else:
 if not args.output==None:
     output_filename = args.output
 else:
-    output_filename = "output.kml"
+    output_filename = "output.txt"
 if not args.sample_size==None:
     try:
         sample_size = float(args.sample_size)
@@ -182,8 +186,25 @@ for asn in bgp.bgptable:
     print "(%d of %d) %s: %d" % (count, num_ases, asn, int(bgp.as_block_size(asn)))
     rand_ips = bgp.random_ips_from_as(asn,sample_size,pack=True)
     geoloc_ip_sample[asn] = [geoloc_an_ip(x) for x in rand_ips]
-    
-    #if count % 100 == 0:
-    #    print ".",
 
 print "done."
+
+def print_ip(ip):
+    try:
+        int(ip) # test if it's packed
+        return socket.inet_ntoa(struct.pack('L',ip))
+    except:
+        return str(ip)
+
+print "Generating output..."
+try:
+    outfile = open(output_filename, 'w')
+    for asn in geoloc_ip_sample:
+        for mark in geoloc_ip_sample[asn]:
+            output_str = "%s %s %s %s\n" % (str(asn), str(mark[0]), str(mark[1]), print_ip(mark[2]))
+            outfile.write(output_str)
+    outfile.close()
+    print "Done!"
+except:
+    print "Error generating output!"
+    outfile.close()
