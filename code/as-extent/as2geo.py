@@ -6,7 +6,6 @@ then spitting out a kml that shows the location of each geoloc'd IP address.
 TODO: Figure out how to actually represent "geographic extent" in a meaningful
 way. Probably bounding polygons with some separation threshold...
 '''
-
 import sys
 import argparse
 import GeoIP
@@ -113,6 +112,30 @@ class bgpParse:
                     break
         return sample
 
+# the ip address needs to be in packed form
+# rounds to save memory
+#err_count = 0
+def geoloc_an_ip(ip,be_frugal=True):
+    global gi,err_count
+    ip_str = socket.inet_ntoa(struct.pack('L',ip))
+    gir = gi.record_by_addr(ip_str)
+    try:
+        if be_frugal:
+            lat = int(gir['latitude']+0.5)
+            lon = int(gir['longitude']+0.5)
+        else:
+            lat = gir['latitude']
+            lon = gir['longitude']
+            ip = ip_str
+    except:
+        #err_count += 1
+        #print "Error! %d" % (err_count)
+        if be_frugal:
+            return (None,None,ip)
+        else:
+            return (None,None,ip_str)
+    return (lat,lon,ip)
+
 parser = argparse.ArgumentParser(description="Determines the geographic extent of an AS.")
 parser.add_argument("-g", "--geodb", help="MaxMind Geolocation DB, uses \
 GeoLiteCity.dat in local folder by default")
@@ -138,7 +161,7 @@ print "done."
 gi = GeoIP.open(geoloc_filename, GeoIP.GEOIP_STANDARD)
 
 sample_size = 0.05
-ip_sample = dict()
+geoloc_ip_sample = dict()
 
 # create a dict of a sample of IP's owned by each ASN
 count = 0
@@ -147,7 +170,9 @@ print "Sampling IP addresses from %d ASes" % (len(bgp.bgptable))
 for asn in bgp.bgptable:
     count += 1
     print "(%d of %d) %s: %d" % (count, num_ases, asn, int(bgp.as_block_size(asn)))
-    ip_sample[asn] = bgp.random_ips_from_as(asn,sample_size,pack=True)
+    rand_ips = bgp.random_ips_from_as(asn,sample_size,pack=True)
+    geoloc_ip_sample[asn] = [geoloc_an_ip(x) for x in rand_ips]
+    
     #if count % 100 == 0:
     #    print ".",
 
