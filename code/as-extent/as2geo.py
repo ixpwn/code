@@ -92,12 +92,15 @@ class bgpParse:
             block_size += pow(2,(32-int(mask)))
         return block_size
 
-    def random_ips_from_as(self, asn, sample_ratio, pack=False):
+    def random_ips_from_as(self, asn, sample_ratio, maxsize=100000, pack=False):
         size = self.as_block_size(str(int(asn))) # should be an integer
         block = self.bgptable[asn]
 
-        # always sample at least 1, but never more than 100k (~225 sec)
-        sample_size = min(int(size * sample_ratio + 1.5), 100000)
+        # always sample at least 1, but never more than maxsize (100k takes ~225 sec)
+        if maxsize > 0:
+            sample_size = min(int(size * sample_ratio + 1.5), maxsize)
+        else:
+            sample_size = int(size * sample_ratio + 1.5) 
 
         sample_nums = random.sample(xrange(0,size), sample_size)
         sample = list()
@@ -142,6 +145,80 @@ def geoloc_an_ip(ip,be_frugal=True):
             return (None,None,ip_str)
     return (lat,lon,ip)
 
+# print an ip address (unpack if necessary)
+def print_ip(ip):
+    try:
+        int(ip) # test if it's packed
+        return socket.inet_ntoa(struct.pack('L',ip))
+    except:
+        return str(ip)
+
+# take a sample of IP's and return the dict.
+def do_one_sample(bgp, sample_size, maxsize=100000):
+    count = 0
+    num_ases = len(bgp.bgptable)
+    geoloc_ip_sample = dict()
+
+    print "Sampling IP addresses from %d ASes" % (len(bgp.bgptable))
+    for asn in bgp.bgptable:
+        count += 1
+        #print "(%d of %d) %s: %d" % (count, num_ases, asn, int(bgp.as_block_size(asn)))
+        rand_ips = bgp.random_ips_from_as(asn,sample_size,maxsize=maxsize,pack=True)
+        geoloc_ip_sample[asn] = [geoloc_an_ip(x) for x in rand_ips]
+    print "Done!"
+
+    return geoloc_ip_sample
+
+def do_print(geoloc_ip_sample, output_filename): 
+    print "Writing sample to output file...",
+    try:
+        outfile = open(output_filename, 'a')
+        for asn in geoloc_ip_sample:
+            for mark in geoloc_ip_sample[asn]:
+                output_str = "%s %s %s %s\n" % (str(asn), str(mark[0]), str(mark[1]), print_ip(mark[2]))
+                outfile.write(output_str)
+        outfile.close()
+        print "Done!"
+    except:
+        print "Error generating output!"
+        outfile.close()
+
+# This prints the geoloc'd results for each AS as it computes them. This works
+# fine if your sample size is relatively small. For very small samples, you
+# should hold the sample in memory and then print it after it has been fully
+# calculated.
+def do_sample_and_print(bgp, sample_size, output_filename, maxsize=-1):
+    count = 0
+    num_ases = len(bgp.bgptable)
+    try:
+        outfile = open(output_filename, 'a')
+        for asn in bgp.bgptable:
+            count += 1
+            print "(%d of %d) %s: %d" % (count, num_ases, asn, int(bgp.as_block_size(asn)))
+            rand_ips = bgp.random_ips_from_as(asn,sample_size,maxsize=maxsize,pack=True)
+            geoloc_ip_sample = [geoloc_an_ip(x) for x in rand_ips]
+            for mark in geoloc_ip_sample:
+                output_str = "%s %s %s %s\n" % (str(asn), str(mark[0]), str(mark[1]), print_ip(mark[2]))
+                outfile.write(output_str)
+
+        outfile.close()
+        print "Done!"
+    except:
+        print "Error generating output!"
+        outfile.close()
+
+# This is my solution to taking very large samples where even a single AS's
+# samples won't easily fit in memory. We basically select a "target" sample and
+# repeatedly sample smaller ones. This is pretty much the only way to take
+# samples of very large percentages of the IP addresses. If you just want to
+# sample 10-20% it's probably faster to use sample_and_print.
+def do_multiple_sampling(bgp, tot_sample_size, incr_sample_size, output_filename):
+    cumulative_sample = 0
+    while cumulative_sample < tot_sample_size:
+        sample = do_one_sample(bgp,incr_sample_size)
+        do_print(sample,output_filename)
+        cumulative_sample += incr_sample_size
+
 parser = argparse.ArgumentParser(description="Determines the geographic extent of an AS.")
 parser.add_argument("-g", "--geodb", help="MaxMind Geolocation DB, uses \
 GeoLiteCity.dat in local folder by default")
@@ -175,36 +252,31 @@ print "done."
 
 gi = GeoIP.open(geoloc_filename, GeoIP.GEOIP_STANDARD)
 
-geoloc_ip_sample = dict()
 
 # create a dict of a sample of IP's owned by each ASN
-count = 0
-num_ases = len(bgp.bgptable)
-print "Sampling IP addresses from %d ASes" % (len(bgp.bgptable))
-for asn in bgp.bgptable:
-    count += 1
-    print "(%d of %d) %s: %d" % (count, num_ases, asn, int(bgp.as_block_size(asn)))
-    rand_ips = bgp.random_ips_from_as(asn,sample_size,pack=True)
-    geoloc_ip_sample[asn] = [geoloc_an_ip(x) for x in rand_ips]
-
-print "done."
-
-def print_ip(ip):
-    try:
-        int(ip) # test if it's packed
-        return socket.inet_ntoa(struct.pack('L',ip))
-    except:
-        return str(ip)
-
-print "Generating output..."
-try:
-    outfile = open(output_filename, 'w')
-    for asn in geoloc_ip_sample:
-        for mark in geoloc_ip_sample[asn]:
-            output_str = "%s %s %s %s\n" % (str(asn), str(mark[0]), str(mark[1]), print_ip(mark[2]))
-            outfile.write(output_str)
-    outfile.close()
-    print "Done!"
-except:
-    print "Error generating output!"
-    outfile.close()
+if sample_size < 0.005:
+    sample = do_one_sample(bgp, sample_size)
+    do_print(sample, output_filename)
+elif sample_size < 0.4:
+    do_sample_and_print(bgp, sample_size, output_filename)
+else:
+    do_multiple_sampling(bgp, sample_size, 0.005, output_filename)
+#count = 0
+#num_ases = len(bgp.bgptable)
+#print "Sampling IP addresses from %d ASes" % (len(bgp.bgptable))
+#try:
+#    outfile = open(output_filename, 'w')
+#    for asn in bgp.bgptable:
+#        count += 1
+#        print "(%d of %d) %s: %d" % (count, num_ases, asn, int(bgp.as_block_size(asn)))
+#        rand_ips = bgp.random_ips_from_as(asn,sample_size,pack=True)
+#        geoloc_ip_sample[asn] = [geoloc_an_ip(x) for x in rand_ips]
+#        for mark in geoloc_ip_sample[asn]:
+#            output_str = "%s %s %s %s\n" % (str(asn), str(mark[0]), str(mark[1]), print_ip(mark[2]))
+#            outfile.write(output_str)
+#
+#    outfile.close()
+#    print "Done!"
+#except:
+#    print "Error generating output!"
+#    outfile.close()
