@@ -39,7 +39,9 @@ class bgpParse:
                     except ValueError:
                         # The second to last entry is in form {N} or {N,M,...}
                         # so we just pick first one as the origin asn.
-                        origin_asn = entries[-2].strip('{}').split(',')[0]
+                        if not "*" in entries[-2]:
+                            origin_asn = entries[-2].strip('{}').split(',')[0]
+                            int(origin_asn) # should be an integer
 
                     try:
                         self.bgptable[origin_asn].append(prefix)
@@ -141,6 +143,8 @@ parser.add_argument("-g", "--geodb", help="MaxMind Geolocation DB, uses \
 GeoLiteCity.dat in local folder by default")
 parser.add_argument("-b", "--bgptable", required=True, help="BGP Table file")
 parser.add_argument("-o", "--output", help="kml output file location")
+parser.add_argument("-s", "--sample_size", help="Percent of addresses to sample (default: 0.05)")
+#parser.add_argument("-m", "--max_sample", help="Maximum number of addresses to sample from an AS")
 args = parser.parse_args()
 
 if not args.geodb==None:
@@ -151,6 +155,13 @@ if not args.output==None:
     output_filename = args.output
 else:
     output_filename = "output.kml"
+if not args.sample_size==None:
+    try:
+        sample_size = float(args.sample_size)
+    except:
+        sample_size = 0.05
+else:
+    sample_size = 0.05
 
 bgptable_filename = args.bgptable
 
@@ -160,7 +171,6 @@ print "done."
 
 gi = GeoIP.open(geoloc_filename, GeoIP.GEOIP_STANDARD)
 
-sample_size = 0.05
 geoloc_ip_sample = dict()
 
 # create a dict of a sample of IP's owned by each ASN
