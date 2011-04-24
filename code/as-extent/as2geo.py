@@ -56,7 +56,7 @@ class bgpParse:
             bgpfile.close()
 
     # returns a random ip address from a prefix
-    def random_ip_from_prefix(prefix):
+    def _random_ip_from_prefix(self, prefix):
         prefix,mask = prefix.split("/")
         mask = int(mask)
 
@@ -65,7 +65,53 @@ class bgpParse:
         ip_addr = socket.inet_ntoa(struct.pack('L',prefix+suffix))
 
         return ip_addr
-       
+
+    # the value of ip MUST be in the range of the prefix or else behavior is
+    # undefined.
+    def _ip_from_prefix(self, prefix,ip):
+        prefix,mask = prefix.split("/")
+        mask = int(mask)
+
+        prefix = struct.unpack('L',socket.inet_aton(prefix))[0]
+        suffix = ip << mask
+        ip_addr = socket.inet_ntoa(struct.pack('L',prefix+suffix))
+
+        return ip_addr
+
+    def as_block_size(self, asn):
+        asn = str(int(asn)) # should be an integer
+        block = self.bgptable[asn]
+        block_size = 0
+        for prefix in block:
+            prefix,mask = prefix.split("/")
+            block_size += pow(2,(32-int(mask)))
+        return block_size
+
+    def random_ips_from_as(self, asn, sample_ratio, pack=False):
+        size = self.as_block_size(str(int(asn))) # should be an integer
+        block = self.bgptable[asn]
+
+        # always sample at least 1, but never more than 100k (~225 sec)
+        sample_size = min(int(size * sample_ratio + 1.5), 100000)
+
+        sample_nums = random.sample(xrange(0,size), sample_size)
+        sample = list()
+        for item in sample_nums:
+            for prefix in block:
+                pre,mask = prefix.split("/")
+                if item >= pow(2,int(mask)):
+                    # selection is in a different prefix
+                    item -= pow(2,int(mask))
+                    continue
+                else:
+                    # selection is in this prefix
+                    # We select like this to sample without replacement
+                    if pack:
+                        sample.append(struct.unpack('L',socket.inet_aton(self._ip_from_prefix(prefix,item)))[0])
+                    else:
+                        sample.append(self._ip_from_prefix(prefix,item))
+                    break
+        return sample
 
 parser = argparse.ArgumentParser(description="Determines the geographic extent of an AS.")
 parser.add_argument("-g", "--geodb", help="MaxMind Geolocation DB, uses \
@@ -91,8 +137,18 @@ print "done."
 
 gi = GeoIP.open(geoloc_filename, GeoIP.GEOIP_STANDARD)
 
-sample_size = 0.1
+sample_size = 0.05
+ip_sample = dict()
 
 # create a dict of a sample of IP's owned by each ASN
+count = 0
+num_ases = len(bgp.bgptable)
+print "Sampling IP addresses from %d ASes" % (len(bgp.bgptable))
 for asn in bgp.bgptable:
-    print "%s: %s" % (asn, str(bgp.bgptable[asn]))
+    count += 1
+    print "(%d of %d) %s: %d" % (count, num_ases, asn, int(bgp.as_block_size(asn)))
+    ip_sample[asn] = bgp.random_ips_from_as(asn,sample_size,pack=True)
+    #if count % 100 == 0:
+    #    print ".",
+
+print "done."
