@@ -184,4 +184,4 @@ for fac_id in facilities:
         # ignore facilities w/ 0 or 1 known ASNs
         continue
     for r in rows:
-        print "%s %s" % (fac_id, r["local_asn"])
+        print "%s %s" % (facilities[fac_id], r["local_asn"])
