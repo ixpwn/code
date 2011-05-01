@@ -1,9 +1,9 @@
 #!/bin/bash
 
 rnodes='r22 r23 r24 r25 r26 r27 r28 r29'
-month='07'
+month='06'
 
-for i in {1..31}
+for i in {1..30}
 do 
     i=`printf %02d $i`
     ran=0

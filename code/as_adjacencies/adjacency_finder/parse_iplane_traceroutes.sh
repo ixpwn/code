@@ -29,6 +29,6 @@ rm -r $mytracedir
 
 adjacencydir=~/tmpdir/as_adjacencies/
 javac FindBorderRouters.java
-java -ea FindBorderRouters origin_as_mapping.txt ip_to_as_mapping.txt $alltracefile | sort -u >>$adjacencydir/${1}.${2}.adjacencies
+java -ea FindBorderRouters origin_as_mapping.txt ~/tmpdir/caida/midar_ip_to_as.clean $alltracefile | sort -u >>$adjacencydir/${1}.${2}.adjacencies
 
 rm $alltracefile
