@@ -9,6 +9,7 @@ if (ARGV.size < 7 or ARGV[0].include?("h"))
   print "-l <fp location file> "
   print "-j <Justine's AS file> "
   print "[-e <edit distance threshold>] "
+  print "[-d <degree threshold>] "
   print "[-g <geo distance threshold>] "
   print "[-o <output>] "
   puts ""
