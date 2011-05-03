@@ -24,7 +24,7 @@ if (ARGV.size < 7 or ARGV[0].include?("h"))
   puts "---- Options -----"
   puts "    a Failure point to AS file"
   puts "    b One Brice point to many Justine (default: One Justine to many Brice), file name will include '_bj' if used"
-  puts "    d Cut off for the failure point degree of Justine points (default 1), file name will include _d# if defined"
+  puts "    d Cut off for the failure point degree (default 1), file name will include _d# if defined"
   puts "    e edit distance threshold for the graphs (default 0.0)"
   puts "    g geo distance threshold for the graphs (default 20000)"
   puts "    h print this text for help"
