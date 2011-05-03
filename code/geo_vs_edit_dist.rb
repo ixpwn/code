@@ -259,40 +259,78 @@ usedBClusters = Hash.new(0)
 puts "Collecting statistics"
 print "  getting edit and geo distance stats"
 puts " O(NM) N=#{hshJfpInfo.size} M=#{hshBfpInfo.size}"
-hshJfpInfo.each{ |kj, j|
-  maxEDist = 0.0
-  aryFpGeoDist = Array.new
 
-  hshBfpInfo.each{|kb, b|
-    eDist = editDist(j.as_set, b.as_set, useJacDist)
-    gDist = geoDist(j.lat, j.lng, b.lat, b.lng)
-
-    if eDist >= editThresh and gDist <= geoThresh
-      if eDist == maxEDist
-        aryFpGeoDist.push(FPValuePair.new(b.fp_id, gDist))
-      elsif eDist > maxEDist
-        maxEDist = eDist
-        aryFpGeoDist.clear
-        aryFpGeoDist.push(FPValuePair.new(b.fp_id, gDist))
-      end
-    end
-  }
-
-  if aryFpGeoDist.size > 0
-    minFp_id = aryFpGeoDist[0].fp_id
-    minGeoDist = aryFpGeoDist[0].value
-    aryFpGeoDist.each{|p|
-      if p.value < minGeoDist
-        minGeoDist_ = p.value
-        minFp_id = p.fp_id
+if useJtoB
+  hshJfpInfo.each{ |kj, j|
+    maxEDist = 0.0
+    aryFpGeoDist = Array.new
+    
+    hshBfpInfo.each{|kb, b|
+      eDist = editDist(j.as_set, b.as_set, useJacDist)
+      gDist = geoDist(j.lat, j.lng, b.lat, b.lng)
+      
+      if eDist >= editThresh and gDist <= geoThresh
+        if eDist == maxEDist
+          aryFpGeoDist.push(FPValuePair.new(b.fp_id, gDist))
+        elsif eDist > maxEDist
+          maxEDist = eDist
+          aryFpGeoDist.clear
+          aryFpGeoDist.push(FPValuePair.new(b.fp_id, gDist))
+        end
       end
     }
-    aryBestEGPair.push(EditGeoDist.new(j.fp_id, minFp_id, maxEDist, minGeoDist))
-
-    usedJClusters[j.fp_id]+=1
-    usedBClusters[minFp_id]+=1
-  end
-}
+    
+    if aryFpGeoDist.size > 0
+      minFp_id = aryFpGeoDist[0].fp_id
+      minGeoDist = aryFpGeoDist[0].value
+      aryFpGeoDist.each{|p|
+        if p.value < minGeoDist
+          minGeoDist_ = p.value
+          minFp_id = p.fp_id
+        end
+      }
+      aryBestEGPair.push(EditGeoDist.new(j.fp_id, minFp_id, maxEDist, minGeoDist))
+      
+      usedJClusters[j.fp_id]+=1
+      usedBClusters[minFp_id]+=1
+    end
+  }
+else
+  hshBfpInfo.each{ |kb, b|
+    maxEDist = 0.0
+    aryFpGeoDist = Array.new
+    
+    hshJfpInfo.each{|kj, j|
+      eDist = editDist(j.as_set, b.as_set, useJacDist)
+      gDist = geoDist(j.lat, j.lng, b.lat, b.lng)
+      
+      if eDist >= editThresh and gDist <= geoThresh
+        if eDist == maxEDist
+          aryFpGeoDist.push(FPValuePair.new(j.fp_id, gDist))
+        elsif eDist > maxEDist
+          maxEDist = eDist
+          aryFpGeoDist.clear
+          aryFpGeoDist.push(FPValuePair.new(j.fp_id, gDist))
+        end
+      end
+  }
+    
+    if aryFpGeoDist.size > 0
+      minFp_id = aryFpGeoDist[0].fp_id
+      minGeoDist = aryFpGeoDist[0].value
+      aryFpGeoDist.each{|p|
+        if p.value < minGeoDist
+          minGeoDist_ = p.value
+          minFp_id = p.fp_id
+        end
+      }
+      aryBestEGPair.push(EditGeoDist.new(minFp_id, b.fp_id, maxEDist, minGeoDist))
+      
+      usedJClusters[minFp_id]+=1
+      usedBClusters[b.fp_id]+=1
+    end
+  }
+end
 
 #Get FP degree for unused failure points in Justine data
 puts "  getting fp degree stats"
@@ -394,13 +432,17 @@ if bGenHistUsedClust
     hshJHist = Hash.new(0)
     hshBHist = Hash.new(0)
     max = 0
+    jMax = 0
     usedJClusters.each{|k,v|
       if v > max then max = v end
+      if v > jMax then jMax = v end
       hshJHist[v]+=1
       hshBHist[v] = 0
     }
+    bMax = 0
     usedBClusters.each{|k,v|
       if v > max then max = v end
+      if v > bMax then bMax = v end
       hshBHist[v]+=1
     }
 
@@ -427,11 +469,11 @@ if bGenHistUsedClust
   gnu.puts "set style histogram cluster gap 1"
   gnu.puts "set xtic rotate by -45"
   plot = "plot "
-  if hshJHist.size > 1
+  if jMax > 1
     plot += "\"#{outHeader}#{fname}.data\" using 2:xtic(1) title \"Justine Data\""
   end
-  if hshBHist.size > 1
-    if hshJHist.size > 1
+  if bMax > 1
+    if jMax > 1
       plot += ", "
     end
     plot += "\"#{outHeader}#{fname}.data\" using 3:xtic(1) title \"Brice Data\""
