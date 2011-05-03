@@ -1,5 +1,6 @@
 '''
-The goal here is to determine the geographic extent of an AS, given a sampling of locations of IPs that it covers. 
+The goal here is to determine the geographic extent of an AS, given a sampling
+of locations of IPs that it covers. 
 
 First, we need to generate a ...
 
@@ -194,6 +195,8 @@ class ISEAGrid:
         self.faces = i.faces
         self.radius = i.verts[0].length # all the same to start with...
         self.subdivision_level = 0 # number of times triangles were divided
+        
+        #self.lookup_table = [list() for 
 
     def area_of_cell(self,r=-1,iterations=-1):
         if r <=0:
