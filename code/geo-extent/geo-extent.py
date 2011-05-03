@@ -40,10 +40,10 @@ The side length of each sub-face is given by:
 Here is a table with some cell sizes:
 
 # subdivisions      # triangles     cell area           cell side length
-    6                   81k         4754 km^2               104 km
-    7                   327k        1188                    52
-    8                   1.3m        297                     26
-    9                   5.2m        74                      13
+    6                   81k         19017 km^2              209 km
+    7                   327k        ??                      104
+    8                   1.3m        ??                      ??
+    9                   5.2m        ??                      ??
 
 Once we have completed the levels of subdivision we want we can blow up the
 sphere to the desired radius. 
@@ -147,26 +147,33 @@ class Icosahedron:
                     Vertex(-PHI, -1, 0), Vertex(PHI, -1, 0) ]
         self.verts = verts
 
-        self.faces = [  Face(verts[11],verts[8],verts[4]),
-                        Face(verts[11],verts[4],verts[1]),
-                        Face(verts[11],verts[1],verts[2]),
-                        Face(verts[11],verts[2],verts[5]),
-                        Face(verts[11],verts[5],verts[8]),
-                        Face(verts[8],verts[0],verts[4]),
-                        Face(verts[4],verts[7],verts[1]),
-                        Face(verts[1],verts[10],verts[2]),
-                        Face(verts[2],verts[6],verts[5]),
-                        Face(verts[5],verts[3],verts[8]),
-                        Face(verts[4],verts[0],verts[7]),
-                        Face(verts[1],verts[7],verts[10]),
-                        Face(verts[2],verts[10],verts[6]),
-                        Face(verts[5],verts[6],verts[3]),
-                        Face(verts[8],verts[3],verts[0]),
-                        Face(verts[0],verts[9],verts[7]),
-                        Face(verts[7],verts[9],verts[10]),
-                        Face(verts[10],verts[9],verts[6]),
-                        Face(verts[6],verts[9],verts[3]),
-                        Face(verts[3],verts[9],verts[0]) ]
+        self.faces = self._gen_faces(verts)
+        
+        
+        
+    def _gen_faces(self,verts):
+        faces = [   Face(verts[11],verts[8],verts[4]),
+                    Face(verts[11],verts[4],verts[1]),
+                    Face(verts[11],verts[1],verts[2]),
+                    Face(verts[11],verts[2],verts[5]),
+                    Face(verts[11],verts[5],verts[8]),
+                    Face(verts[8],verts[0],verts[4]),
+                    Face(verts[4],verts[7],verts[1]),
+                    Face(verts[1],verts[10],verts[2]),
+                    Face(verts[2],verts[6],verts[5]),
+                    Face(verts[5],verts[3],verts[8]),
+                    Face(verts[4],verts[0],verts[7]),
+                    Face(verts[1],verts[7],verts[10]),
+                    Face(verts[2],verts[10],verts[6]),
+                    Face(verts[5],verts[6],verts[3]),
+                    Face(verts[8],verts[3],verts[0]),
+                    Face(verts[0],verts[9],verts[7]),
+                    Face(verts[7],verts[9],verts[10]),
+                    Face(verts[10],verts[9],verts[6]),
+                    Face(verts[6],verts[9],verts[3]),
+                    Face(verts[3],verts[9],verts[0]) ]
+
+        return faces
 
 class ISEAGrid:
     global PHI
@@ -176,7 +183,21 @@ class ISEAGrid:
         self.verts = i.verts
         self.faces = i.faces
         self.radius = i.verts[0].length # all the same to start with...
+        self.subdivision_level = 0 # number of times triangles were divided
 
+    def area_of_cell(self,r=-1,iterations=-1):
+        if r <=0:
+            r = self.radius
+        if iterations < 0:
+            iterations = self.subdivision_level
+        return (math.sqrt(3) * r*r / (PHI * math.sqrt(5))) / \
+                math.pow(4, iterations)
+
+    def side_of_cell_length(self,r=-1, iterations=-1):
+        area = self.area_of_cell(r,iterations)
+        return math.sqrt(4 * area / math.sqrt(3))
+
+    # this is the real workhorse
     def subdivide(self,iterations):
         old_faces = self.faces
         for i in range(0,iterations):
@@ -189,12 +210,15 @@ class ISEAGrid:
                 count += 4
             
             old_faces = new_faces
-            print "iteration done: %d triangles" % count
+            print "%d triangles (area: ~%.2f km^2/cell, len: ~%.2f km)" \
+                    % ( count,self.area_of_cell(6378,i), \
+                        self.side_of_cell_length(6378,i))
 
         self.faces = new_faces
+        self.subdivision_level += iterations
             
 
 if __name__ == "__main__":
     i = ISEAGrid()
-    i.subdivide(7)
+    i.subdivide(8)
     print len(i.faces)
