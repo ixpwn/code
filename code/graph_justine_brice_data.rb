@@ -59,7 +59,7 @@ if fpLocFilename == "" or fpAsFilename == "" or justineFilename == ""
   exit
 end
 
-#Struct need and functions to create empty entries
+#Struct need
 LatLng = Struct.new(:lat, :lng)
 FPInfo = Struct.new(:fp_id, :lat, :lng, :as_set)
 
@@ -189,7 +189,6 @@ def deleteDist(hsh1, hsh2)
   dist
 end
 
-
 #Function: return geo distance
 RAD_PER_DEG = 0.017453293
 Rmiles = 3956
@@ -278,7 +277,7 @@ if cdfED or cdfGD or cdfGDofED or cdfEDofGD or scatterGDvsED or scatterEDvsGD
   aryJfpInfo.each{ |j|
     minEDist = 99999.0
     minEGDistAry = Array.new
-    minGDist = 12500 #Farthest two points on earth can be
+    minGDist = 20000 #Farthest two points on earth can be in km
     minGEDistAry = Array.new
     
     aryBfpInfo.each{|b|
@@ -440,7 +439,7 @@ if scatterGDvsED
   c = 0.0
   size = aryEDist.size
   aryEDist.each{|e|
-    output.puts("#{e.edit+(rand)} #{e.geo}")
+    output.puts("#{e.edit+(rand*0.9)} #{e.geo}")
     c+=1.0
   }
   output.close
