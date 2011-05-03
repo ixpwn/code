@@ -41,7 +41,7 @@ Here is a table with some cell sizes:
 
 # subdivisions      # triangles     cell area           cell side length
     6                   81k         19017 km^2              209 km
-    7                   327k        ??                      104
+    7                   327k        4754                    104
     8                   1.3m        ??                      ??
     9                   5.2m        ??                      ??
 
@@ -55,6 +55,9 @@ doing lookups.
 #psyco.full()
 
 import sys
+
+# debugging/profiling
+
 import math
 
 
@@ -82,6 +85,9 @@ class Vertex:
         self.y = self.coords[1]
         self.z = self.coords[2]
 
+    def __str__(self):
+        return "(%f, %f, %f)" % (self.x, self.y, self.z)
+
 class Edge:
     def __init__(self, v1, v2):
         self.v1 = v1
@@ -98,6 +104,9 @@ class Edge:
         my = (self.v2.y + self.v1.y) * 0.5
         mz = (self.v2.z + self.v1.z) * 0.5
         return Vertex(mx, my, mz)
+
+    def __str__(self):
+        print "[%s %s]" % (str(self.v1), str(self.v2))
 
 class Face:
     def __init__(self,v1, v2, v3):
@@ -116,6 +125,7 @@ class Face:
         cx = (self.v1.x + self.v2.x + self.v3.x) / 3
         cy = (self.v1.y + self.v2.y + self.v3.y) / 3
         cz = (self.v1.z + self.v2.z + self.v3.z) / 3
+        return Vertex(cx,cy,cz)
 
     def subdivide(self):
         f1 = Face(self.v1, self.e1.midpoint(), self.e2.midpoint())
@@ -198,7 +208,7 @@ class ISEAGrid:
         return math.sqrt(4 * area / math.sqrt(3))
 
     # this is the real workhorse
-    def subdivide(self,iterations):
+    def subdivide(self,iterations,hpy=None):
         old_faces = self.faces
         for i in range(0,iterations):
             new_faces = []
@@ -214,11 +224,15 @@ class ISEAGrid:
                     % ( count,self.area_of_cell(6378,i), \
                         self.side_of_cell_length(6378,i))
 
+
         self.faces = new_faces
         self.subdivision_level += iterations
             
 
 if __name__ == "__main__":
     i = ISEAGrid()
-    i.subdivide(8)
+    i.subdivide(7) # currently the most we can subdivide w/o MemoryError
     print len(i.faces)
+    exit()
+    for face in i.faces:
+        print "%s %f" % (face.centroid, face.centroid.magnitude())
