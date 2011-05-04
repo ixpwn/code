@@ -110,7 +110,7 @@ class Edge:
         return Vertex(mx, my, mz)
 
     def __str__(self):
-        print "[%s %s]" % (str(self.v1), str(self.v2))
+        return "[%s %s]" % (str(self.v1), str(self.v2))
 
 class Face:
     def __init__(self,v1, v2, v3):
@@ -139,7 +139,6 @@ class Face:
         return [f1, f2, f3, f4]
 
     # blow up all the edges (basically do a new init, with scaled verts)
-    # for this particular application we don't need to recalc centroid
     def inflate(self,desired_radius):
         self.v1.scale(desired_radius)
         self.v2.scale(desired_radius)
@@ -157,8 +156,8 @@ class Face:
     # face.
     def intersects(self,vertex):
         radius = Edge(self.centroid, self.v1).length()
-        vertex.scale(radius)
-        dist = Edge(self.centroid, self.vertex).length()
+        vertex.scale(self.centroid.magnitude()) 
+        dist = Edge(self.centroid, vertex).length()
         if dist <= radius:
             return True
         else:
@@ -204,19 +203,22 @@ class Icosahedron:
 
         return faces
 
-def latlon_to_cartesian(lat,lon):
-    global EARTH
+def latlon_to_cartesian(lat,lon,radius=EARTH):
 
-    theta = math.radians(lat)
-    phi = math.radians(lon)
-    x = EARTH * math.sin(theta) * math.cos(phi)
-    y = EARTH * math.sin(theta) * math.sin(phi)
-    z = EARTH * math.cos(theta)
+    theta = math.radians(float(lat+90))
+    phi = math.radians(float(lon))
+    x = radius * math.sin(theta) * math.cos(phi)
+    y = radius * math.sin(theta) * math.sin(phi)
+    z = radius * math.cos(theta)
 
     return (x,y,z)
 
-def cartesian_to_latlon(x,y,z):
-    radius = Edge(Vertex(0,0,0),Vertex(x,y,z)).length()
+def cartesian_to_latlon(vertex):
+    radius = Edge(Vertex(0,0,0),vertex).length()
+    x = vertex.x
+    y = vertex.y
+    z = vertex.z
+
     lat = math.acos(z/radius)
     lon = math.atan2(y,x)
     lat = math.degrees(lat) - 90
@@ -236,13 +238,29 @@ def get_latlon_for_face(grid,face):
     
 def add_face_to_table_cell(grid,face):
     latlon = get_latlon_for_face(grid,face)
-    lat = int(latlon[0] + 0.5) + 90 - 1
-    lon = int(latlon[1] + 0.5) + 180 - 1
+    lat_index = int(latlon[0] + 0.5) + 90 - 1
+    lon_index = int(latlon[1] + 0.5) + 180 - 1
     try:
-        grid.lookup_table[lat][lon].append(face)
+        grid.lookup_table[lat_index][lon_index].append(face)
     except IndexError:
-        print "%d %d" % (lat, lon)
+        print "%d %d" % (lat_index, lon_index)
         raise
+
+def add_face_to_table_cells(grid,face):
+    latlon_v1 = cartesian_to_latlon(face.v1)
+    latlon_v2 = cartesian_to_latlon(face.v2)
+    latlon_v3 = cartesian_to_latlon(face.v3)
+
+    lat_min = int(min(latlon_v1[0], latlon_v2[0], latlon_v3[0]))
+    lat_max = int(max(latlon_v1[0], latlon_v2[0], latlon_v3[0]) + 0.5)
+    lon_min = int(min(latlon_v1[1], latlon_v2[1], latlon_v3[1]))
+    lon_max = int(max(latlon_v1[1], latlon_v2[1], latlon_v3[1]) + 0.5)
+
+    for lat in xrange(lat_min,lat_max):
+        for lon in xrange(lon_min, lon_max):
+            v = latlon_to_cartesian(lat,lon)
+            if face.intersects(Vertex(v[0],v[1],v[2])):
+                grid.lookup_table[lat-1][lon-1].append(face)
 
 class ISEAGrid:
     global PHI, EARTH
@@ -295,7 +313,7 @@ if __name__ == "__main__":
     i = ISEAGrid()
     i.subdivide(1) # 7 is max for 32bit; 8 needs 18+ GB, 9 needs 25+ GB
     print len(i.faces)
-    map(lambda x: add_face_to_table_cell(i,x), i.faces)
+    map(lambda x: add_face_to_table_cells(i,x), i.faces)
     for lat in range(0,len(i.lookup_table)):
         for lon in range(0,len(i.lookup_table[lat])):
             print "In cell (%d,%d), containing %d faces" % (lat,lon,len(i.lookup_table[lat][lon]))
