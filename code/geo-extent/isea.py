@@ -2,20 +2,6 @@
 The goal here is to determine the geographic extent of an AS, given a sampling
 of locations of IPs that it covers. 
 
-First, we need to generate a ...
-
-get the grid item that contains a particular lat/lon
-
-we can generate a series of points that correspond to the center points of
-a icosahedron tiling of the globe. We need a generator function for these. 
-
-the generator could behave as follows. Consider the 20 faces of a regular
-icosahedron. The sphere incscribed in the icosahedron (tangent to the faces) is
-our Earth. We can state that one "origin" tangent point is at 0/0. We then
-subdivide the triangles to achieve our desired resolution. We start with the 20
-faces, then divide each block of our list into 4 pieces for each extra level of
-resolution we want until we have achieved desired resolution.
-
 Another approach is to have a polyhedron composed of faces (defined in turn by
 points). We know the x,y,z coordinates of each vertex of a icosahedron. Given
 the three corners of a triangle we can easily determine the coordinates of four
@@ -49,18 +35,21 @@ Here is a table with some cell sizes:
 Once we have completed the levels of subdivision we want we can blow up the
 sphere to the desired radius. 
 
-we can use kristin's method for mapping a lat/lon to a grid point quickly for
-doing lookups. 
+We use Kristin's method for mapping a lat/lon to a grid point quickly for doing
+lookups. In particular, we maintain a 2-d "array" (really, a list of lists)
+indexed by latitude and then longitude, in whole degree increments; this is our
+lookup table. After we generate all our grid cells to the desired resolution,
+we add each such cell to the lookup table by determining if the cell could
+include the lat/lon point that element of the lookup table describes. The
+current implementation does this by projecting a ray from the center of the
+earth into 3-space, and then determining if that ray intersects a sphere around
+the centroid of a face with radius equal to the distance between a vertex and
+the centroid. To bound the number of rays we have to generate per face, we only
+check the range of lat/lons that are between the three vertices of the grid
+cell.
 '''
-#import psyco
-#psyco.full()
-
 import sys
 
-# debugging/profiling
-
-from multiprocessing import Process, Pipe
-from itertools import izip
 import math
 
 
@@ -311,7 +300,7 @@ class ISEAGrid:
             
 if __name__ == "__main__":
     i = ISEAGrid()
-    i.subdivide(1) # 7 is max for 32bit; 8 needs 18+ GB, 9 needs 25+ GB
+    i.subdivide(6) # 7 is max for 32bit; 8 needs 18+ GB, 9 needs 25+ GB
     print len(i.faces)
     map(lambda x: add_face_to_table_cells(i,x), i.faces)
     for lat in range(0,len(i.lookup_table)):
