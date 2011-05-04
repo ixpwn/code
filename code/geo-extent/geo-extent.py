@@ -59,6 +59,8 @@ import sys
 
 # debugging/profiling
 
+from multiprocessing import Process, Pipe
+from itertools import izip
 import math
 
 
@@ -146,6 +148,11 @@ class Face:
         self.e2 = Edge(self.v1,self.v3)
         self.e3 = Edge(self.v2,self.v3)
 
+    # draw a ray from center to vertex, see if it intersects this face
+    def intersects(self,vertex):
+        
+        
+
 class Icosahedron:
     global PHI
 
@@ -186,6 +193,27 @@ class Icosahedron:
 
         return faces
 
+def get_latlon_for_face(grid,face):
+    #lat = math.degrees(math.asin(face.centroid.x/grid.radius))
+    #lon = math.degrees(math.asin(face.centroid.z/grid.radius))
+    lat = math.acos(face.centroid.z/grid.radius)
+    lon = math.atan2(face.centroid.y,face.centroid.x)
+    lat = math.degrees(lat) - 90
+    lon = math.degrees(lon) 
+    assert (lat >= -90 and lat <= 90), "latitude out of bounds: %f" % lat
+    assert (lon >= -180 and lat <= 180), "longitude out of bounds: %f" % lon
+    return (lat,lon)
+    
+def add_face_to_table_cell(grid,face):
+    latlon = get_latlon_for_face(grid,face)
+    lat = int(latlon[0] + 0.5) + 90 - 1
+    lon = int(latlon[1] + 0.5) + 180 - 1
+    try:
+        grid.lookup_table[lat][lon].append(face)
+    except IndexError:
+        print "%d %d" % (lat, lon)
+        raise
+
 class ISEAGrid:
     global PHI
 
@@ -195,8 +223,10 @@ class ISEAGrid:
         self.faces = i.faces
         self.radius = i.verts[0].length # all the same to start with...
         self.subdivision_level = 0 # number of times triangles were divided
-        
-        #self.lookup_table = [list() for 
+
+        # index by lat, then lon
+        self.lookup_table = [ [ [] for x in range(360) ] for i in range(180)]
+
 
     def area_of_cell(self,r=-1,iterations=-1):
         if r <=0:
@@ -211,6 +241,7 @@ class ISEAGrid:
         return math.sqrt(4 * area / math.sqrt(3))
 
     # this is the real workhorse
+    # can be parallelized easily (also uses absurd amounts of memory)
     def subdivide(self,iterations,hpy=None):
         old_faces = self.faces
         for i in range(0,iterations):
@@ -227,15 +258,18 @@ class ISEAGrid:
                     % ( count,self.area_of_cell(6378,i), \
                         self.side_of_cell_length(6378,i))
 
-
         self.faces = new_faces
         self.subdivision_level += iterations
             
-
 if __name__ == "__main__":
     i = ISEAGrid()
-    i.subdivide(7) # currently the most we can subdivide w/o MemoryError
+    i.subdivide(1) # 7 is max for 32bit; 8 needs 18+ GB, 9 needs 25+ GB
     print len(i.faces)
-    exit()
-    for face in i.faces:
-        print "%s %f" % (face.centroid, face.centroid.magnitude())
+    map(lambda x: add_face_to_table_cell(i,x), i.faces)
+    for lat in range(0,len(i.lookup_table)):
+        for lon in range(0,len(i.lookup_table[lat])):
+            print "In cell (%d,%d), containing %d faces" % (lat,lon,len(i.lookup_table[lat][lon]))
+            for face in i.lookup_table[lat][lon]:
+                print " | %s %f" % (face.centroid, face.centroid.magnitude())
+    #for face in i.faces:
+    #    print "%s %f" % (face.centroid, face.centroid.magnitude())

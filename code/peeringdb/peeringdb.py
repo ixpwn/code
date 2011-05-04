@@ -177,7 +177,7 @@ except:
 facilities = get_priv_fac_fpids()
 c = conn.cursor()
 for fac_id in facilities:
-    q = "SELECT `local_asn` FROM `peerParticipantsPrivates` WHERE `facility_id`=%s" % fac_id 
+    q = "SELECT DISTINCT `local_asn` FROM `peerParticipantsPrivates` WHERE `facility_id`=%s" % fac_id 
     c.execute(q)
     rows = c.fetchall()
     if len(rows) < 2:
