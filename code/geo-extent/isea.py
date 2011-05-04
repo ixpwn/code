@@ -65,6 +65,7 @@ import math
 
 
 PHI = ( 1 + math.sqrt(5) ) * 0.5 # 1.61803...
+EARTH = 6378. # km
 
 # a ISEA-ish grid of the globe
 class Vertex:
@@ -148,10 +149,20 @@ class Face:
         self.e2 = Edge(self.v1,self.v3)
         self.e3 = Edge(self.v2,self.v3)
 
-    # draw a ray from center to vertex, see if it intersects this face
+    # Draw a ray from center to vertex, see if it intersects this face. Because
+    # I'm both lazy and stupid I define a sphere around the centroid and
+    # project the ray (i.e., vertex) to the same distance as the centroid. If
+    # the projected ray is within the sphere, then they "intersect". Close
+    # enough. This assumes equal distance from a centroid to a vertex of the
+    # face.
     def intersects(self,vertex):
-        
-        
+        radius = Edge(self.centroid, self.v1).length()
+        vertex.scale(radius)
+        dist = Edge(self.centroid, self.vertex).length()
+        if dist <= radius:
+            return True
+        else:
+            return False
 
 class Icosahedron:
     global PHI
@@ -193,9 +204,28 @@ class Icosahedron:
 
         return faces
 
+def latlon_to_cartesian(lat,lon):
+    global EARTH
+
+    theta = math.radians(lat)
+    phi = math.radians(lon)
+    x = EARTH * math.sin(theta) * math.cos(phi)
+    y = EARTH * math.sin(theta) * math.sin(phi)
+    z = EARTH * math.cos(theta)
+
+    return (x,y,z)
+
+def cartesian_to_latlon(x,y,z):
+    radius = Edge(Vertex(0,0,0),Vertex(x,y,z)).length()
+    lat = math.acos(z/radius)
+    lon = math.atan2(y,x)
+    lat = math.degrees(lat) - 90
+    lon = math.degrees(lon) 
+    assert (lat >= -90 and lat <= 90), "latitude out of bounds: %f" % lat
+    assert (lon >= -180 and lat <= 180), "longitude out of bounds: %f" % lon
+    return (lat,lon)
+
 def get_latlon_for_face(grid,face):
-    #lat = math.degrees(math.asin(face.centroid.x/grid.radius))
-    #lon = math.degrees(math.asin(face.centroid.z/grid.radius))
     lat = math.acos(face.centroid.z/grid.radius)
     lon = math.atan2(face.centroid.y,face.centroid.x)
     lat = math.degrees(lat) - 90
@@ -215,7 +245,7 @@ def add_face_to_table_cell(grid,face):
         raise
 
 class ISEAGrid:
-    global PHI
+    global PHI, EARTH
 
     def __init__(self):
         i = Icosahedron()
@@ -255,8 +285,8 @@ class ISEAGrid:
             
             old_faces = new_faces
             print "%d triangles (area: ~%.2f km^2/cell, len: ~%.2f km)" \
-                    % ( count,self.area_of_cell(6378,i), \
-                        self.side_of_cell_length(6378,i))
+                    % ( count,self.area_of_cell(EARTH,i), \
+                        self.side_of_cell_length(EARTH,i))
 
         self.faces = new_faces
         self.subdivision_level += iterations
