@@ -110,9 +110,13 @@ class Face:
         self.e1 = Edge(v1,v2)
         self.e2 = Edge(v1,v3)
         self.e3 = Edge(v2,v3)
+        self.stuff = list()
 
     def centroid(self):
         return centroid
+
+    def latlon(self):
+        return cartesian_to_latlon(self.centroid)
 
     def _calc_centroid(self):
         cx = (self.v1.x + self.v2.x + self.v3.x) / 3
@@ -235,7 +239,12 @@ def add_face_to_table_cell(grid,face):
         print "%d %d" % (lat_index, lon_index)
         raise
 
+
+lats_seen = list()
+lons_seen = list()
+coords_seen = list()
 def add_face_to_table_cells(grid,face):
+    global lats_seen, lons_seen
     latlon_v1 = cartesian_to_latlon(face.v1)
     latlon_v2 = cartesian_to_latlon(face.v2)
     latlon_v3 = cartesian_to_latlon(face.v3)
@@ -248,7 +257,20 @@ def add_face_to_table_cells(grid,face):
     for lat in xrange(lat_min,lat_max):
         for lon in xrange(lon_min, lon_max):
             v = latlon_to_cartesian(lat,lon)
+            #if lat == 17 and lon == 78:
+                #print "HERE IT IS!!!!"
+
+# TODO: the above print statement shows up but no vertex with the given
+# coordinates appears to pass the collision test. There is probably a problem
+# with the collision detection routine that could be solved by bumping the
+# radius up a little bit. Or maybe there is a distortion problem... Who
+# knows...
             if face.intersects(Vertex(v[0],v[1],v[2])):
+                #print "%d %d" % (lat,lon)
+                #if not lat in lats_seen:
+                #    lats_seen.append(lat)
+                #if not lon in lons_seen:
+                #    lons_seen.append(lon)
                 grid.lookup_table[lat-1][lon-1].append(face)
 
 class ISEAGrid:
@@ -264,7 +286,6 @@ class ISEAGrid:
         # index by lat, then lon
         self.lookup_table = [ [ [] for x in range(360) ] for i in range(180)]
 
-
     def area_of_cell(self,r=-1,iterations=-1):
         if r <=0:
             r = self.radius
@@ -276,6 +297,7 @@ class ISEAGrid:
     def side_of_cell_length(self,r=-1, iterations=-1):
         area = self.area_of_cell(r,iterations)
         return math.sqrt(4 * area / math.sqrt(3))
+
 
     # this is the real workhorse
     # can be parallelized easily (also uses absurd amounts of memory)
@@ -297,12 +319,57 @@ class ISEAGrid:
 
         self.faces = new_faces
         self.subdivision_level += iterations
-            
+
+    # this should be called after you do subdivision
+    def init_lookup_table(self):
+        map(lambda x: add_face_to_table_cells(self,x), self.faces)
+
+    def put(self, item, lat, lon):
+        assert item, "no item (don't waste my fucking time)"
+        best_face = self.get(lat,lon)
+        best_face.stuff.append(item)
+
+    def get(self, lat, lon):
+        assert (lat >= -90 and lat <= 90), "latitude invalid: %f" % lat
+        assert (lon >= -180 and lat <= 180), "longitude invalid: %f" % lon
+
+        lat_idx = int(lat + 0.5) - 1
+        lon_idx = int(lon + 0.5) - 1
+
+        x,y,z = latlon_to_cartesian(lat,lon)
+        v = Vertex(x,y,z)
+
+        faces = self.lookup_table[lat_idx][lon_idx]
+        assert len(faces) > 0, "no faces in table for %f %f" % (lat,lon)
+
+        best_face = None
+        best_dist = -1
+
+        for face in faces:
+            mag = face.centroid.magnitude() # rescale to be fair
+            v.scale(mag)
+            dist = Edge(v,face.centroid).length() / mag # normalize
+            if not best_face or dist < best_dist:
+                best_face = face
+                best_dist = dist
+
+        assert best_face and best_dist >= 0, "no best face" 
+
+        return best_face
+        
+
+def get_latlon_for_face(grid,face):
+    lat = math.acos(face.centroid.z/grid.radius)
+    lon = math.atan2(face.centroid.y,face.centroid.x)
+    lat = math.degrees(lat) - 90
+    lon = math.degrees(lon) 
+
 if __name__ == "__main__":
     i = ISEAGrid()
     i.subdivide(6) # 7 is max for 32bit; 8 needs 18+ GB, 9 needs 25+ GB
     print len(i.faces)
-    map(lambda x: add_face_to_table_cells(i,x), i.faces)
+    #map(lambda x: add_face_to_table_cells(i,x), i.faces)
+    i.init_lookup_table()
     for lat in range(0,len(i.lookup_table)):
         for lon in range(0,len(i.lookup_table[lat])):
             print "In cell (%d,%d), containing %d faces" % (lat,lon,len(i.lookup_table[lat][lon]))

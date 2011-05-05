@@ -43,7 +43,7 @@
 %\titlespacing{\abstract}{0pt}{*0}{*0}
 %%REPLACES ITEMIZE
 
-\title{A Glance at Physical Connectivity and Internet Resilience}
+\title{Modeling Regional Failures and Interdomain Connectivity}
 \author{\begin{tabular}{ccc} Shaddi Hasan & Justine Sherry & Kristin Stephens\\
 %        \begin{multicols}{2}{{\it Draft - Please do not distribute.}}\\
         \end{tabular}\\
@@ -57,16 +57,15 @@
 \begin{document}    
     \maketitle
 
+        %Internet interdomain resilience requires engineering for failure, from deploying robust routing protocols, to establishing logical connectivity redundancy (multihoming), to building redundant interomain physical links.  
     \abstract{\it
-    Internet connectivity is an integral component of modern commerce and
-    communication.  Loss of Internet connectivity can shut down industries,
-    limit the spread of information, and undermine free speech.  However,
-    Internet Exchange Points are somewhat vulnerable targets to interrupt Internet connectivity.
-     In this paper, we investigate where the impact of damage to these 
-    exchange points, leaving network communication susceptible to
-    interruption in cases of disaster or direct attack.  Our analysis
-    estimates that\ldots
-     }
+        Earthquakes, hurricanes, and other regional disasters can severely stress Internet interdomain connectivity.
+        Because of their widespread impact, these disasters can cause failures of entire Exchange Points or severance of long distance cables, leading to correlated failures in interdomain connectivity. 
+        In this paper, we develop a model to explore the impact of regional failures on AS connectivity.
+        We map logical AS connectivity links to redundant geographic peering connections, developing metrics to quantify `regional peering diversity.' 
+        By modeling the redundancy of logical AS connectivity in terms of regional peering diversity, we can perform finer-grained analysis of the impact of catastrophe than work which relies only on logical AS connectivity alone.  
+        Our results show that our model\ldots
+    }
     
     \section{Introduction}
         \input{introduction}
