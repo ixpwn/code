@@ -1,7 +1,7 @@
 import sys
 import isea
 
-NUM_SUBDIVISIONS = 1
+NUM_SUBDIVISIONS = 6
 
 grid = isea.ISEAGrid()
 grid.subdivide(NUM_SUBDIVISIONS)
