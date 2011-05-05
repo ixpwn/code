@@ -47,7 +47,7 @@ if fpAsFilename == "" and justineFilename == ""
 end
 
 if degThresh != 1
-  outHeader += "_d#{jDegThresh}"
+  outHeader += "_d#{degThresh}"
 end
 
 #Needed variables
@@ -62,7 +62,7 @@ if fpAsFilename != ""
   input.each{|line|
     c+=1
     if line =~ /(.+)#{delim}(.+)/
-      fp_id = $1
+      fp_id = $1.strip
       asn = $2.to_i
 
       hshFPASSet[fp_id][asn] = true
@@ -79,6 +79,8 @@ if fpAsFilename != ""
       v.each_key{|asn|
         hshASN[asn] = true
       }
+    else
+      puts "#{k}"
     end
   }
   hshFPASSet = tmp

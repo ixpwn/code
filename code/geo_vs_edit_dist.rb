@@ -4,7 +4,7 @@ onlyGenGraphs = false
 
 #Check input
 if (ARGV.size < 7 or ARGV[0].include?("h"))
-  print "Usage: #{$0} -[zyxw] [-h] [-u] [-b] "
+  print "Usage: #{$0} -[zyxwvtm] [-h] [-u] [-b] "
   print "-a <fp as file> "
   print "-l <fp location file> "
   print "-j <Justine's AS file> "
