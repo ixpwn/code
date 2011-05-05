@@ -140,7 +140,6 @@ justineFile.each{|line|
     lng = $4.to_f
 
     hshJAsnPLatLng[asn1][asn2].push(IdLatLng.new(inc_id, lat, lng))
-    hshJAsnPLatLng[asn2][asn1].push(IdLatLng.new(inc_id, lat, lng))
     
     inc_id += 1
   else
