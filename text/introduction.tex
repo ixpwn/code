@@ -1,3 +1,13 @@
+Earthquakes, hurricanes, and other large-scale disasters cause widespread damage
+to physical infrastructure, and Internet routing infrastructure is no exception.
+In 2006, an earthquake in Taiwan severed six of seven 
+undersea cables connecting North and Southeast Asia with each other and North 
+America. 
+Regional disasters like these have the potential to generate substantial 
+correlated failures when multiple links disconnect and entire Exchange Points
+go dark.
+
+\eat{
 The United States government defines {\it critical infrastructure} as ``systems
 and assets, whether physical or virtual, so vital to the United States that the
 incapacity or destruction of such systems and assets would have a debilitation
@@ -6,52 +16,43 @@ safety, or any combination of those matters''~\cite{patriotact}. Internet
 connectivity, a fundamental requirement for modern communication, is
 undoubtedly such a system.  Businesses~\cite{something?} and
 governments~\cite{cyberspacepolicy} hence value the physical security of
-Internet infrastructure to disaster or attack.
+Internet infrastructure to disaster.
+}
 
+In this paper, we explore the impact of regional disasters on Internet connectivity
+using a new modeling technique, geodesic failure regionalization.
+While previous work in Internet resilience focused primarily on logical connectivity, 
+we map peering relationships to one or more geographic regions where peering takes place.
+We approximate geographic regions by generating a polyhedron whose faces
+represent a contiguous area suceptible to disaster. 
+We then use publicly available peering datasets~\cite{brice, peeringdb}, traceroutes, and DNS and commercial
+geolocation techniques to map locations where networks peer (exchange points or
+ private peering facilities) to faces on the polyhedron.
+We use this model to simulate the impact of regional failures, \ie{} the removal of
+one or more faces, and investigate the following issues:
 
-In this paper, we provide a brief glance at physical Internet resilience by
-focusing on a model of geographic locations where multiple networks converge to
-interconnect. Damage to an Internet Exchange Point (IXP) or Point-of-Presence
-(PoP) are worst-case scenarios for physical disaster, as these locations
-provide connectivity between anywhere from two to hundreds of networks.
-Building on prior work which develops techniques for identifying formal
-IXPs~\cite{ixps-mapped}, discovering PoPs in general~\cite{iplane}, and
-pinpointing border routers~\cite{asbrsomething}, we develop an AS connectivity
-graph that focuses on the locations where peering takes place.  We then
-consider the behavior of an adversary who seeks to maximize damage to this
-connectivity graph.  Such an adversary might wish to disconnect two Tier 1
-networks, isolate a large number of networks, or partition a geographic region
-from the rest of the Internet.  We consider each in turn.
+\noindent{\bf Regional Peering Redundancy.} How many regions do networks typically peer in? How does it scale with the degree of the network?
 
+\noindent{\bf Quantifying Resilience.} Can we quantify the resiliance of a network to failure terms of it's number of peers, global footprint, and number of regions it peers in?
+
+\noindent{\bf Identifying Worst-Case Scenarios.} Are there bottlenecks in the physical connectivity graph? How badly could the network partition in a worst-case regional disaster?
 
 We are not the first to evaluate Internet resilience to
 failures~\cite{michigan, measuringresilience, resilience-under-BGP,
-resilience-complex-networks}.  Our contribution is to consider physical
-locations of conncetivity as {\it failure points}.  Previous work focused on
+resilience-complex-networks}.  Our contribution is to consider the impact of physical
+disaster on the observed connectivity map.  Previous work focused on
 the impact of severing logical links, that is, declaring that two networks had
-been entirely disconnected.  This overestimates realistic damage in some cases,
-and underestimates in others.  For example, it is highly unlikely that two Tier
+been entirely disconnected.  This type of model cannot capture the network impact
+of physical disaster.  For example, it is highly unlikely that two Tier
 1 networks would be partitioned in any single event.  These networks have
-global footprints and connect at multiple physical locations.  Thus,
-disconnecting Tier 1 networks is an overestimate of damage in all scenarios
-except a coordinated attack.  On the other hand, disconnecting logical links
+global footprints and connect at multiple physical locations.
+  On the other hand, disconnecting logical links
 one by one ignores the physical reality that any disaster that strikes a link
 in shared infrastructure such as an IXP is likely to impact a large number of
 links.  In this case, modeling failure of a single logical link is an
-underestimate.  We argue that focusing on physical connectivity points is a
-more realistic model of the impact of physical disaster. 
+underestimate.  We argue that focusing on physical connectivity is the best way to
+develop models of the impact of physical disaster. 
 
-\eat{ Not true!
- 
-Second, we consider resilience in an adversarial setting.  Recent events in
-Egypt~\cite{thenews} and other countries involved government intervention to
-sever Internet access in order to limit communication between revolutionaries
-and the outside world.  Further, the criticality of Internet communication
-makes it a prime target for terrorist attack.  Attacks by any human entity may
-involve damage to one or more physical locations.  Hence, our analysis is a
-superset of previous work which focused primarily on natural disaster or
-sideffects from events in a single location.
-}
 
 Before we move forward, we clarify the scope of our goals.  
 Evaluations of AS-level connectivity graphs show that traceroute-based
@@ -65,23 +66,10 @@ these links when the primary links are available.  These and other impediments
 mean that any analysis over measurement-based graphs may be missing critical
 information.  Thus, the results of our study should not be considered hard and
 fast projections of Internet connectivity.  Instead, we aim only to provide
-{\it estimates} and {\it bounds} on the impact of attack on Internet
-infrastructure.
+{\it estimates} and {\it bounds} on the impact of regional disaster on Internet
+routing.
 
-Our results estimate that \ldots \justine{My hypotheses: (1) we find that
-Tier-1's are too well connected to feasibly partition - we can echo the
-argument from that paper Kristin found that the threat is misconfiguration or
-attacks on the control plane, but certainly not the physical infrastructure.
-(2) The exact opposite is true for small networks - that taking out a single
-IXP in many cases is enough to knock offline dozens of ASes and hundreds or
-thousands of prefixes. WRT geographic regions, I am less sure - hopefully we
-can identify the Egypts of the world?} \kristin{Where did I find this??}
+Our results estimate that \justine{\ldots}
 
-The remainder of the paper is organized as follows.
-Section~\ref{sec:connectivity} discusses our dataset and model of the physical
-connectivity of Internet infrastructure.  Section~\ref{sec:algos} provides the
-algorithms we used in analyzing this model.  Section~\ref{sec:results}
-describes our discoveries from applying these algorithms.  Finally, we discuss
-related work in \S~\ref{sec:relatedwork} and conclude in
-\S~\ref{sec:conclusion}.
+The remainder of the paper is organized as follows \justine{\ldots}:.
 
