@@ -51,6 +51,7 @@ cell.
 import sys
 
 import math
+import numpy
 
 
 PHI = ( 1 + math.sqrt(5) ) * 0.5 # 1.61803...
@@ -124,6 +125,19 @@ class Face:
         cz = (self.v1.z + self.v2.z + self.v3.z) / 3
         return Vertex(cx,cy,cz)
 
+    def area(self):
+        v1 = self.v1
+        v2 = self.v2
+        v3 = self.v3
+        a1 = numpy.array([[v1.x,v2.x,v3.x],[v1.y,v2.y,v3.y],[1,1,1]])
+        a2 = numpy.array([[v1.y,v2.y,v3.y],[v1.z,v2.z,v3.z],[1,1,1]])
+        a3 = numpy.array([[v1.z,v2.z,v3.z],[v1.x,v2.x,v3.x],[1,1,1]])
+        d1 = abs(numpy.linalg.det(a1))
+        d2 = abs(numpy.linalg.det(a2))
+        d3 = abs(numpy.linalg.det(a3))
+        area = 0.5 * math.sqrt(d1*d1 + d2*d2 + d3*d3)
+        return area
+
     def subdivide(self):
         f1 = Face(self.v1, self.e1.midpoint(), self.e2.midpoint())
         f2 = Face(self.e2.midpoint(), self.e3.midpoint(), self.v3)
@@ -148,7 +162,12 @@ class Face:
     # enough. This assumes equal distance from a centroid to a vertex of the
     # face.
     def intersects(self,vertex):
-        radius = Edge(self.centroid, self.v1).length()
+        # this should not be necessary; we're obviously doing some bad
+        # distortion.
+        l1 = Edge(self.centroid, self.v1).length()
+        l2 = Edge(self.centroid, self.v2).length()
+        l3 = Edge(self.centroid, self.v3).length()
+        radius = max(l1,l2,l3) # if you set to 3*max, all problems go away
         vertex.scale(self.centroid.magnitude()) 
         dist = Edge(self.centroid, vertex).length()
         if dist <= radius:
@@ -159,7 +178,7 @@ class Face:
 class Icosahedron:
     global PHI
 
-    def __init__(self):
+    def __init__(self,radius=EARTH):
         verts = [   Vertex(0, PHI, 1), Vertex(0, -PHI, 1), 
                     Vertex(0,-PHI,-1), Vertex(0, PHI, -1), 
                     Vertex(1, 0, PHI), Vertex(1, 0, -PHI), 
@@ -280,7 +299,8 @@ class ISEAGrid:
         i = Icosahedron()
         self.verts = i.verts
         self.faces = i.faces
-        self.radius = i.verts[0].length # all the same to start with...
+        #self.radius = i.verts[0].length # all the same to start with...
+        self.radius = EARTH
         self.subdivision_level = 0 # number of times triangles were divided
 
         # index by lat, then lon
@@ -302,17 +322,29 @@ class ISEAGrid:
     # this is the real workhorse
     # can be parallelized easily (also uses absurd amounts of memory)
     def subdivide(self,iterations,hpy=None):
-        old_faces = self.faces
+        old_faces = self.faces[:]
         for i in range(0,iterations):
             new_faces = []
             count = 0
             for f in old_faces:
                 subdivided_faces = f.subdivide()
-                [face.inflate(self.radius) for face in subdivided_faces]
+                #v1 = subdivided_faces[0].v2
+                #v2 = subdivided_faces[2].v1
+                #v3 = subdivided_faces[3].v1
+                #print "%s %s %s" % (str(v1), str(v2), str(v3)) 
+                #[face.inflate(self.radius) for face in subdivided_faces]
+                #print "%s %s %s" % (str(v1), str(v2), str(v3)) 
+                for face in subdivided_faces:
+                    #before = face.area()
+                    ##before = face.centroid.magnitude()
+                    face.inflate(self.radius)
+                    ##print "iter: %d before: %f after: %f" % (i,before, face.area())
+                    #print "iter: %d before: %f after: %f" % (i,before, face.centroid.magnitude())
+
                 new_faces += subdivided_faces
                 count += 4
             
-            old_faces = new_faces
+            old_faces = new_faces[:]
             print "%d triangles (area: ~%.2f km^2/cell, len: ~%.2f km)" \
                     % ( count,self.area_of_cell(EARTH,i), \
                         self.side_of_cell_length(EARTH,i))
@@ -323,6 +355,10 @@ class ISEAGrid:
     # this should be called after you do subdivision
     def init_lookup_table(self):
         map(lambda x: add_face_to_table_cells(self,x), self.faces)
+        for lat in self.lookup_table:
+            for lon in lat:
+                #assert len(lon) > 0, "there are some missing cells, init fails"
+                pass
 
     def put(self, item, lat, lon):
         assert item, "no item (don't waste my fucking time)"
