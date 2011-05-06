@@ -59,6 +59,7 @@ IdAsnDist = Struct.new(:b_id, :j_id, :asn1, :asn2, :dist)
 #Variables
 cUnmatchedJ = 0  #Count number of justince points not match anything
 hshBLatLng = Hash.new
+hshJLatLng = Hash.new
 hshFpIxp = Hash.new
 hshBAsn = Hash.new{|h,k| h[k] = Hash.new(false)}
 hshBAsnPLatLng = Hash.new{|h,k| h[k] = Hash.new{|h2,k2| h2[k2] = Array.new}}
@@ -117,7 +118,6 @@ peeringFile.each{|line|
     fp_id = hshFpIxp[ixp_id]
     assert(fp_id != nil, "#{ixp_id} doesn't match to anything.")
     hshBAsnPLatLng[asn1][asn2].push(hshBLatLng[fp_id])
-    hshBAsnPLatLng[asn2][asn1].push(hshBLatLng[fp_id])
   else
     assert(false, "Bad parse: #{line}")
   end
@@ -139,7 +139,10 @@ justineFile.each{|line|
     lat = $3.to_f
     lng = $4.to_f
 
-    hshJAsnPLatLng[asn1][asn2].push(IdLatLng.new(inc_id, lat, lng))
+    ill = IdLatLng.new(inc_id, lat, lng)
+    hshJLatLng[inc_id] = ill
+    hshJAsnPLatLng[asn1][asn2].push(ill)
+    hshJAsnPLatLng[asn2][asn1].push(ill)
     
     inc_id += 1
   else
@@ -180,47 +183,112 @@ end
 #Go through Justine list
 print "Finding best distance of everything! This may take a while: N*? "
 puts "N(#{jLen}) ?(?)"
-hshJAsnPLatLng.each{|asn1,h1|
-  h1.each{|asn2,listJ|
-    listB = hshBAsnPLatLng[asn1][asn2]
-    if listB.size > 0
+cSanity = 0
+cBPoints = 0
+maxListSize = 0
+cPairs = 0
+cUnmatchedB = 0
+fakeOpt = false
+hshBAsnPLatLng.each{|asn1,h1|
+  h1.each{|asn2,listB|
+    cPairs += 1
+    cBPoints+=listB.size
+    listJ = hshJAsnPLatLng[asn1][asn2]
+    if listJ.size > maxListSize then maxListSize = listJ.size end
+    if listB.size > maxListSize then maxListSize = listB.size end
+    if listJ.size > 0
+      if fakeOpt
+        diff = listB.size - listJ.size
+        if diff > 0 then cUnmatchedB += diff end
+      end
       distList = Array.new
       #Creat Hash of ids
       hshJ = Hash.new(false)
       hshB = Hash.new(false)
-      listB.each{|b| hshB[b.ident] = true}
+      listJ.each{|j| hshJ[j.ident] = true}
       #Find geo distance between all (lat,lng) pairs
       # list [(fp_id,latF,lngF, inc_id, latJ, lngJ, dist)...]
-      listJ.each{|j|
-        hshJ[j.ident] = true
-        listB.each{|b|
-          distList.push(BJLatLngDist.new(b.ident,b.lat,b.lng,
-                                         j.ident,j.lat,j.lng,
-                                         geoDist(b.lat,b.lng,j.lat,j.lng)))
-        }
-      }
-
-      #Sort by dist
-      distList.sort!{|a,b| a.dist <=> b.dist}
       
-      #Go through list, remove from Hashmaps of IDs when have unused pairs,
-      # add to list [(fp_id,inc_id,dist,asn1,asn2)...]
-      c = 0
-      distList.each{|d|
-        if hshB[d.b_id] and hshJ[d.j_id]
-          aryBestDistAsnP.push(IdAsnDist.new(d.b_id,d.j_id,asn1,asn2,d.dist))
-          hshB[d.b_id] = false
-          hshJ[d.j_id] = false
-          c+=1
-          if c >= listJ.size
-            break
+      listB.each{|b|
+        minDist = nil
+        minJ = nil
+        if fakeOpt
+          hshB[b.ident] = true
+        else
+          minDist = 20000.0 # max distance b/t two points on earth
+          minJ = nil
+        end
+        listJ.each{|j|
+          if fakeOpt
+            distList.push(BJLatLngDist.new(b.ident,b.lat,b.lng,
+                                           j.ident,j.lat,j.lng,
+                                           geoDist(b.lat,b.lng,j.lat,j.lng)))
+          else
+            dist = geoDist(b.lat,b.lng,j.lat,j.lng)
+            if dist < minDist
+              minDist = dist
+              minJ = j
+            end
           end
+        }
+        if !fakeOpt
+          # distList.push(IdAsnDist.new(b.ident,minJ.ident,asn1,asn2,minDist))
+          aryBestDistAsnP.push(
+              IdAsnDist.new(b.ident,minJ.ident,asn1,asn2,minDist))
+          cSanity+=1
         end
       }
+
+      # distList.sort!{|a,b| a.dist <=> b.dist}
+
+      # listJ.size.times{|i| aryBestDistAsnP.push(distList[i])}
+
+      #Sort by dist
+      if fakeOpt
+        distList.sort!{|a,b| a.dist <=> b.dist}
+        
+        (distList.size-1).times{|i|
+          if distList[i].dist == distList[i+1].dist
+            cSanity+=1
+          end
+        }
+        
+        #Go through list, remove from Hashmaps of IDs when have unused pairs,
+        # add to list [(fp_id,inc_id,dist,asn1,asn2)...]
+        c = 0
+        distList.each{|d|
+          if hshB[d.b_id] and hshJ[d.j_id]
+            aryBestDistAsnP.push(IdAsnDist.new(d.b_id,d.j_id,asn1,asn2,d.dist))
+            hshB[d.b_id] = false
+            hshJ[d.j_id] = false
+            c+=1
+            if c >= listJ.size
+              break
+            end
+          end
+        }
+
+        tmpB = false
+        hshB.each{|k,v| tmpB = v or tmpB}
+        tmpJ = false
+        hshJ.each{|k,v| tmpJ = v or tmpJ}
+        str = ""
+        if tmpB then str = "Didn't use all Brice points" end
+        if tmpJ then str += " Didn't use all Justine points" end
+        assert((!tmpB or !tmpJ), str)
+      end
+    else
+      cUnmatchedB += listB.size
     end
   }
 }
-puts "Done finding data"
+puts "Done finding data:"
+puts "  Adjacencies: #{cPairs}"
+puts "  Total Brice Points: #{cBPoints} #{cSanity}"
+puts "  Unused Brice Points: #{cUnmatchedB}"
+
+puts "Sanity check:"
+puts "  Max list size: #{maxListSize}"
 
 puts "Making CDF graphs"
 fname = "cdf_adj_dist"
@@ -229,7 +297,9 @@ output = File.new("#{outHeader}#{fname}.data", "w+")
 size = aryBestDistAsnP.size
 c = 0.0
 aryBestDistAsnP.each{|e|
-  output.puts("#{e.dist} #{c/size}")
+  b = hshBLatLng[e.b_id]
+  j = hshJLatLng[e.j_id]
+  output.puts("#{e.dist} #{c/size} #{b.lat} #{b.lng} #{j.lat} #{j.lng}")
   c+=1.0
 }
 output.close
