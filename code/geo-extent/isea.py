@@ -64,7 +64,7 @@ class Vertex:
         self.x = self.coords[0]
         self.y = self.coords[1]
         self.z = self.coords[2]
-        self.length = self.magnitude()
+        #self.length = self.magnitude()
 
     # with regard to origin
     def magnitude(self):
@@ -78,6 +78,10 @@ class Vertex:
         self.x = self.coords[0]
         self.y = self.coords[1]
         self.z = self.coords[2]
+
+    def do_scale(self,desired_radius=1):
+        self.scale(desired_radius)
+        return self
 
     def __str__(self):
         return "(%f, %f, %f)" % (self.x, self.y, self.z)
@@ -104,13 +108,16 @@ class Edge:
 
 class Face:
     def __init__(self,v1, v2, v3):
+        #self.v1 = Vertex(v1.x,v1.y,v1.z)
+        #self.v2 = Vertex(v2.x,v2.y,v2.z)
+        #self.v3 = Vertex(v3.x,v3.y,v3.z)
         self.v1 = v1
         self.v2 = v2
         self.v3 = v3
         self.centroid = self._calc_centroid()
-        self.e1 = Edge(v1,v2)
-        self.e2 = Edge(v1,v3)
-        self.e3 = Edge(v2,v3)
+        self.e1 = Edge(self.v1,self.v2)
+        self.e2 = Edge(self.v1,self.v3)
+        self.e3 = Edge(self.v2,self.v3)
         self.stuff = list()
 
     def centroid(self):
@@ -138,15 +145,28 @@ class Face:
         area = 0.5 * math.sqrt(d1*d1 + d2*d2 + d3*d3)
         return area
 
-    def subdivide(self):
+    def old_subdivide(self):
         f1 = Face(self.v1, self.e1.midpoint(), self.e2.midpoint())
         f2 = Face(self.e2.midpoint(), self.e3.midpoint(), self.v3)
         f3 = Face(self.e1.midpoint(), self.v2, self.e3.midpoint())
         f4 = Face(self.e1.midpoint(), self.e2.midpoint(), self.e3.midpoint())
         return [f1, f2, f3, f4]
 
+    def scaled_subdivide(self,radius):
+        a = self.e1.midpoint().do_scale(radius)
+        b = self.e2.midpoint().do_scale(radius)
+        c = self.e3.midpoint().do_scale(radius)
+        l1 = Edge(self.v1, a).length()
+        l2 = Edge(a,b).length()
+        print "edge-ratio: %f" % (l1/l2)
+        f1 = Face(self.v1, a, b)
+        f2 = Face(b,c,self.v3)
+        f3 = Face(a,self.v2,c)
+        f4 = Face(a,b,c)
+        return [f1, f2, f3, f4]
+
     # blow up all the edges (basically do a new init, with scaled verts)
-    def inflate(self,desired_radius):
+    def old_inflate(self,desired_radius):
         self.v1.scale(desired_radius)
         self.v2.scale(desired_radius)
         self.v3.scale(desired_radius)
@@ -161,13 +181,13 @@ class Face:
     # the projected ray is within the sphere, then they "intersect". Close
     # enough. This assumes equal distance from a centroid to a vertex of the
     # face.
-    def intersects(self,vertex):
+    def intersects(self,vertex,col_mult=1.):
         # this should not be necessary; we're obviously doing some bad
         # distortion.
         l1 = Edge(self.centroid, self.v1).length()
         l2 = Edge(self.centroid, self.v2).length()
         l3 = Edge(self.centroid, self.v3).length()
-        radius = max(l1,l2,l3) # if you set to 3*max, all problems go away
+        radius = max(l1,l2,l3) * col_mult # if you set to 3*max, all problems go away
         vertex.scale(self.centroid.magnitude()) 
         dist = Edge(self.centroid, vertex).length()
         if dist <= radius:
@@ -178,7 +198,7 @@ class Face:
 class Icosahedron:
     global PHI
 
-    def __init__(self,radius=EARTH):
+    def __init__(self,radius=1):
         verts = [   Vertex(0, PHI, 1), Vertex(0, -PHI, 1), 
                     Vertex(0,-PHI,-1), Vertex(0, PHI, -1), 
                     Vertex(1, 0, PHI), Vertex(1, 0, -PHI), 
@@ -186,10 +206,11 @@ class Icosahedron:
                     Vertex(PHI, 1, 0), Vertex(-PHI, 1, 0), 
                     Vertex(-PHI, -1, 0), Vertex(PHI, -1, 0) ]
         self.verts = verts
+        for vert in self.verts:
+            vert.scale(radius)
+
 
         self.faces = self._gen_faces(verts)
-        
-        
         
     def _gen_faces(self,verts):
         faces = [   Face(verts[11],verts[8],verts[4]),
@@ -215,7 +236,7 @@ class Icosahedron:
 
         return faces
 
-def latlon_to_cartesian(lat,lon,radius=EARTH):
+def latlon_to_cartesian(lat,lon,radius=1):
 
     theta = math.radians(float(lat+90))
     phi = math.radians(float(lon))
@@ -262,7 +283,7 @@ def add_face_to_table_cell(grid,face):
 lats_seen = list()
 lons_seen = list()
 coords_seen = list()
-def add_face_to_table_cells(grid,face):
+def add_face_to_table_cells(grid,face,col_mult):
     global lats_seen, lons_seen
     latlon_v1 = cartesian_to_latlon(face.v1)
     latlon_v2 = cartesian_to_latlon(face.v2)
@@ -276,15 +297,21 @@ def add_face_to_table_cells(grid,face):
     for lat in xrange(lat_min,lat_max):
         for lon in xrange(lon_min, lon_max):
             v = latlon_to_cartesian(lat,lon)
-            #if lat == 17 and lon == 78:
-                #print "HERE IT IS!!!!"
 
-# TODO: the above print statement shows up but no vertex with the given
-# coordinates appears to pass the collision test. There is probably a problem
-# with the collision detection routine that could be solved by bumping the
-# radius up a little bit. Or maybe there is a distortion problem... Who
-# knows...
-            if face.intersects(Vertex(v[0],v[1],v[2])):
+            # TODO: the below print statement shows up but no vertex with the
+            # given coordinates appears to pass the collision test. There is
+            # probably a problem with the collision detection routine that
+            # could be solved by bumping the radius up a little bit. Or maybe
+            # there is a distortion problem... Who knows...
+
+            # TODO: we could keep track of what lat/lons we don't wind up
+            # adding any faces to. It would be telling if these were
+            # consistent.
+
+            if lat == 67 and lon == 135:
+                print "HERE IT IS!!!!"
+
+            if face.intersects(Vertex(v[0],v[1],v[2]),col_mult):
                 #print "%d %d" % (lat,lon)
                 #if not lat in lats_seen:
                 #    lats_seen.append(lat)
@@ -295,13 +322,22 @@ def add_face_to_table_cells(grid,face):
 class ISEAGrid:
     global PHI, EARTH
 
-    def __init__(self):
+    def __init__(self,verts=None,faces=None,sub_level=0,radius=1,col_mult=1.):
         i = Icosahedron()
-        self.verts = i.verts
-        self.faces = i.faces
+        if verts:
+            self.verts = verts
+        else:
+            self.verts = i.verts
+        if faces:
+            self.faces = faces
+        else:
+            self.faces = i.faces
         #self.radius = i.verts[0].length # all the same to start with...
-        self.radius = EARTH
-        self.subdivision_level = 0 # number of times triangles were divided
+        #for v in i.verts:
+        #    print "init v.len: %f v.mag(): %f" % (v.length, v.magnitude())
+        self.radius = radius 
+        self.col_mult = col_mult # collision detection radius multiplier
+        self.subdivision_level = sub_level # number of times triangles were divided
 
         # index by lat, then lon
         self.lookup_table = [ [ [] for x in range(360) ] for i in range(180)]
@@ -312,34 +348,31 @@ class ISEAGrid:
         if iterations < 0:
             iterations = self.subdivision_level
         return (math.sqrt(3) * r*r / (PHI * math.sqrt(5))) / \
-                math.pow(4, iterations)
+                math.pow(4, iterations+1)
 
     def side_of_cell_length(self,r=-1, iterations=-1):
         area = self.area_of_cell(r,iterations)
         return math.sqrt(4 * area / math.sqrt(3))
 
-
     # this is the real workhorse
     # can be parallelized easily (also uses absurd amounts of memory)
-    def subdivide(self,iterations,hpy=None):
+    def subdivide(self,iterations):
         old_faces = self.faces[:]
         for i in range(0,iterations):
+            self.init_lookup_table(reset=True)
+            self.check_lookup_table()
             new_faces = []
             count = 0
             for f in old_faces:
-                subdivided_faces = f.subdivide()
-                #v1 = subdivided_faces[0].v2
-                #v2 = subdivided_faces[2].v1
-                #v3 = subdivided_faces[3].v1
-                #print "%s %s %s" % (str(v1), str(v2), str(v3)) 
-                #[face.inflate(self.radius) for face in subdivided_faces]
-                #print "%s %s %s" % (str(v1), str(v2), str(v3)) 
-                for face in subdivided_faces:
-                    #before = face.area()
-                    ##before = face.centroid.magnitude()
-                    face.inflate(self.radius)
-                    ##print "iter: %d before: %f after: %f" % (i,before, face.area())
-                    #print "iter: %d before: %f after: %f" % (i,before, face.centroid.magnitude())
+                subdivided_faces = f.scaled_subdivide(self.radius)
+                for face_idx in range(0,len(subdivided_faces)):
+                    face = subdivided_faces[face_idx]
+                #    before_area = face.area()
+                #    before = face.centroid.magnitude()
+                #    face.inflate(self.radius)
+                #    print "iter: %d tri: %d area before: %f after: %f" % (i,face_idx,before_area, face.area())
+                    print "iter: %d tri: %d area after: %f" % (i,face_idx,face.area())
+                #    print "iter: %d tri: %d magn before: %f after: %f" % (i,face_idx,before, face.centroid.magnitude())
 
                 new_faces += subdivided_faces
                 count += 4
@@ -350,15 +383,30 @@ class ISEAGrid:
                         self.side_of_cell_length(EARTH,i))
 
         self.faces = new_faces
+        
         self.subdivision_level += iterations
 
     # this should be called after you do subdivision
-    def init_lookup_table(self):
-        map(lambda x: add_face_to_table_cells(self,x), self.faces)
-        for lat in self.lookup_table:
-            for lon in lat:
-                #assert len(lon) > 0, "there are some missing cells, init fails"
-                pass
+    def init_lookup_table(self,reset=False):
+        if reset:
+            self.lookup_table = [ [ [] for x in range(360) ] for i in range(180)]
+        map(lambda x: add_face_to_table_cells(self,x,self.col_mult), self.faces)
+
+    # debugging use only really
+    def check_lookup_table(self):
+        fail_count = 0
+        try_count = 0
+        for lat in xrange(0,180):
+            for lon in xrange(0,360):
+                try:
+                    try_count += 1
+                    assert len(self.lookup_table[lat][lon]) > 0, \
+                        "there are some missing cells (%d,%d), check fails" % (lat,lon)
+                except AssertionError as e:
+                    print e
+                    fail_count += 1
+
+        print "CHECK REPORT: %d tries, %d fails" % (try_count,fail_count)
 
     def put(self, item, lat, lon):
         assert item, "no item (don't waste my fucking time)"
@@ -411,5 +459,3 @@ if __name__ == "__main__":
             print "In cell (%d,%d), containing %d faces" % (lat,lon,len(i.lookup_table[lat][lon]))
             for face in i.lookup_table[lat][lon]:
                 print " | %s %f" % (face.centroid, face.centroid.magnitude())
-    #for face in i.faces:
-    #    print "%s %f" % (face.centroid, face.centroid.magnitude())

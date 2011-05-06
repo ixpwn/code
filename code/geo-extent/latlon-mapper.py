@@ -1,10 +1,9 @@
 import sys
 import isea
+import off
 
-NUM_SUBDIVISIONS = 6
-
-grid = isea.ISEAGrid()
-grid.subdivide(NUM_SUBDIVISIONS)
+mikejones = off.MikeJones("out6.off")
+grid = isea.ISEAGrid(mikejones.verts,mikejones.faces,6,isea.EARTH,2.)
 grid.init_lookup_table()
 
 for line in sys.stdin:
@@ -15,7 +14,7 @@ for line in sys.stdin:
 
     try:
         face = grid.get(lat,lon)
-        print "%.2f %.2f: %s" % (lat,lon,face.latlon())
+        print "%f %f: %s" % (lat,lon,face.latlon())
     except:
-        print "%.2f %.2f: FAILURE" % (lat,lon)
+        print "%f %f: FAILURE" % (lat,lon)
 

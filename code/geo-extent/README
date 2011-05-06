@@ -1,0 +1,22 @@
+This folder is a mess.
+
+In theory, isea.py contains everything to make use of the ISEA-based grid.
+However, the native implementation of generating the icosahedron is not working.
+Fortunately I found a C program [1] that generates the coordinates of the faces
+of such a subdivided icosahedron. This produces a file in OFF format [2] that
+the off.py module parses. The MikeJones class (it's 3am, I get to choose goofy
+names) generates a list of Vertex objects and Face objects that are compatible
+with the ISEAGrid. Given a MikeJones object, you can easily initialize an
+ISEAGrid, and then make use of all the nice put/get/lookup features that class
+provides.
+
+To compile sphere.c, you need to do:
+
+gcc -lm sphere.c
+
+I have modified both mapadj.ph and latlon-mapper.py to support the new
+initialization approach.
+
+
+[1] http://student.ulb.ac.be/~claugero/sphere/sphere.c
+[2] http://shape.cs.princeton.edu/benchmark/documentation/off_format.html
