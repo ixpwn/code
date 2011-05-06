@@ -27,8 +27,8 @@ The side length of each sub-face is given by:
 Here is a table with some cell sizes:
 
 # subdivisions      # triangles     cell area           cell side length
-    6                   81k         19017 km^2              209 km
-    7                   327k        4754                    104
+    6                   81k         >4754 km^2              104 km
+    7                   327k        >1400                   52
     8                   1.3m        ??                      ??
     9                   5.2m        ??                      ??
 
@@ -158,7 +158,7 @@ class Face:
         c = self.e3.midpoint().do_scale(radius)
         l1 = Edge(self.v1, a).length()
         l2 = Edge(a,b).length()
-        print "edge-ratio: %f" % (l1/l2)
+        #print "edge-ratio: %f" % (l1/l2)
         f1 = Face(self.v1, a, b)
         f2 = Face(b,c,self.v3)
         f3 = Face(a,self.v2,c)
@@ -308,15 +308,10 @@ def add_face_to_table_cells(grid,face,col_mult):
             # adding any faces to. It would be telling if these were
             # consistent.
 
-            if lat == 67 and lon == 135:
-                print "HERE IT IS!!!!"
+            #if lat == 67 and lon == 135:
+            #    print "HERE IT IS!!!!"
 
             if face.intersects(Vertex(v[0],v[1],v[2]),col_mult):
-                #print "%d %d" % (lat,lon)
-                #if not lat in lats_seen:
-                #    lats_seen.append(lat)
-                #if not lon in lons_seen:
-                #    lons_seen.append(lon)
                 grid.lookup_table[lat-1][lon-1].append(face)
 
 class ISEAGrid:
@@ -332,9 +327,6 @@ class ISEAGrid:
             self.faces = faces
         else:
             self.faces = i.faces
-        #self.radius = i.verts[0].length # all the same to start with...
-        #for v in i.verts:
-        #    print "init v.len: %f v.mag(): %f" % (v.length, v.magnitude())
         self.radius = radius 
         self.col_mult = col_mult # collision detection radius multiplier
         self.subdivision_level = sub_level # number of times triangles were divided
@@ -365,15 +357,6 @@ class ISEAGrid:
             count = 0
             for f in old_faces:
                 subdivided_faces = f.scaled_subdivide(self.radius)
-                for face_idx in range(0,len(subdivided_faces)):
-                    face = subdivided_faces[face_idx]
-                #    before_area = face.area()
-                #    before = face.centroid.magnitude()
-                #    face.inflate(self.radius)
-                #    print "iter: %d tri: %d area before: %f after: %f" % (i,face_idx,before_area, face.area())
-                    print "iter: %d tri: %d area after: %f" % (i,face_idx,face.area())
-                #    print "iter: %d tri: %d magn before: %f after: %f" % (i,face_idx,before, face.centroid.magnitude())
-
                 new_faces += subdivided_faces
                 count += 4
             

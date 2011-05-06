@@ -10,12 +10,24 @@ with the ISEAGrid. Given a MikeJones object, you can easily initialize an
 ISEAGrid, and then make use of all the nice put/get/lookup features that class
 provides.
 
+There are two OFF files to use (i.e., two sets of faces). out6.off corresponds
+to the 6-level tesselation (around 81k triangles with area >4700km^2, with side
+length ~100km), and out7.off corresponds to the 7-level tesselation (around
+327k triangles with area >1400km^2, with side length ~50km). You should use the
+6 level one probably.
+
 To compile sphere.c, you need to do:
 
 gcc -lm sphere.c
 
 I have modified both mapadj.ph and latlon-mapper.py to support the new
 initialization approach.
+
+I have found that you get best results for collision detection if you use 2x
+the radius of the triangle (col_mult=2.). This gets you pretty much 100%
+adjacencies mapped to a triangle. When col_mult = 1 you have about 86%; given
+that we're generating the faces properly now I'm not too concerned about
+blowing up the radius. It will at least provide a consistent mapping.
 
 
 [1] http://student.ulb.ac.be/~claugero/sphere/sphere.c
