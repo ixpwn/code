@@ -188,8 +188,6 @@ class Icosahedron:
         self.verts = verts
 
         self.faces = self._gen_faces(verts)
-        for face in self.faces:
-            face.inflate(radius)
         
         
         
@@ -340,8 +338,8 @@ class ISEAGrid:
                     #before = face.area()
                     ##before = face.centroid.magnitude()
                     face.inflate(self.radius)
-                    #print "iter: %d before: %f after: %f" % (i,before, face.area())
-                    ##print "iter: %d before: %f after: %f" % (i,before, face.centroid.magnitude())
+                    ##print "iter: %d before: %f after: %f" % (i,before, face.area())
+                    #print "iter: %d before: %f after: %f" % (i,before, face.centroid.magnitude())
 
                 new_faces += subdivided_faces
                 count += 4
