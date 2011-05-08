@@ -106,11 +106,11 @@ class Edge:
     def __str__(self):
         return "[%s %s]" % (str(self.v1), str(self.v2))
 
+face_id = 0
 class Face:
     def __init__(self,v1, v2, v3):
-        #self.v1 = Vertex(v1.x,v1.y,v1.z)
-        #self.v2 = Vertex(v2.x,v2.y,v2.z)
-        #self.v3 = Vertex(v3.x,v3.y,v3.z)
+        global face_id_count
+        self.id = face_id
         self.v1 = v1
         self.v2 = v2
         self.v3 = v3
@@ -119,12 +119,22 @@ class Face:
         self.e2 = Edge(self.v1,self.v3)
         self.e3 = Edge(self.v2,self.v3)
         self.stuff = list()
+        face_id += 1 # big wheels keep on turning, proud mary keep on burning
 
     def centroid(self):
         return centroid
 
     def latlon(self):
         return cartesian_to_latlon(self.centroid)
+
+    def uv(self):
+        #u = self.centroid.x / self.centroid.magnitude()
+        #v = self.centroid.y / self.centroid.magnitude()
+        vert = Vertex(self.centroid.x,self.centroid.y,self.centroid.z)
+        vert.scale(1)
+        u = 0.5 + 0.5 * math.atan2(vert.x, vert.y) / math.pi
+        v = math.asin(vert.y) * math.pi * 0.5
+        return (u,v)
 
     def _calc_centroid(self):
         cx = (self.v1.x + self.v2.x + self.v3.x) / 3
@@ -423,7 +433,7 @@ class ISEAGrid:
         assert best_face and best_dist >= 0, "no best face" 
 
         return best_face
-        
+
 
 def get_latlon_for_face(grid,face):
     lat = math.acos(face.centroid.z/grid.radius)

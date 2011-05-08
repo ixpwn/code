@@ -11,10 +11,10 @@ ISEAGrid, and then make use of all the nice put/get/lookup features that class
 provides.
 
 There are two OFF files to use (i.e., two sets of faces). out6.off corresponds
-to the 6-level tesselation (around 81k triangles with area >4700km^2, with side
-length ~100km), and out7.off corresponds to the 7-level tesselation (around
-327k triangles with area >1400km^2, with side length ~50km). You should use the
-6 level one probably.
+to the 6-level tessellation (around 81k triangles with area >4700km^2, with
+side length ~100km), and out7.off corresponds to the 7-level tessellation
+(around 327k triangles with area >1400km^2, with side length ~50km). You should
+use the 6 level one probably.
 
 To compile sphere.c, you need to do:
 
