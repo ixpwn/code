@@ -109,7 +109,7 @@ class Edge:
 face_id = 0
 class Face:
     def __init__(self,v1, v2, v3):
-        global face_id_count
+        global face_id
         self.id = face_id
         self.v1 = v1
         self.v2 = v2

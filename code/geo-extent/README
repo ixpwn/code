@@ -29,6 +29,31 @@ adjacencies mapped to a triangle. When col_mult = 1 you have about 86%; given
 that we're generating the faces properly now I'm not too concerned about
 blowing up the radius. It will at least provide a consistent mapping.
 
+Using the lat-lon mapping script
+================================
+This is probably the easiest way to leverage the mapping that the grid
+provides. latlon-mapper.py now supports adding arbitrary "notes" to the input
+and output of each line. The input format is:
+
+    <lat> <lon> [<notes ....>]
+        
+Latitude and longitude are treated as floating point values. Notes are
+optional, and everything after the second field will be considered a note for
+that line. After performing a lookup for the <lat>/<lon>, the output format is:
+
+    <orig lat> <orig lon>: <face id> (<tri lat>, <tri lon>) <notes>
+
+The "orig lat/lon" is the input location we're looking up.  After the colon,
+the face_id and tri lat/lon correspond to the unique identifier of the face as
+well as the lat/lon of its centroid. Following this any notes that were on the
+same line as the original input are output without modification. 
+
+For instance, say you wanted to find the grid location of a list of IP
+addresses and ASNs. You would like the output file to have the grid location on
+the same line as the IP address and ASN. You can do this by including those two
+values as a note. 
+
+
 
 [1] http://student.ulb.ac.be/~claugero/sphere/sphere.c
 [2] http://shape.cs.princeton.edu/benchmark/documentation/off_format.html
