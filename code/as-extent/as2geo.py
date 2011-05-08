@@ -67,7 +67,7 @@ class bgpParse:
 
         prefix = struct.unpack('L',socket.inet_aton(prefix))[0]
         suffix = random.getrandbits(32-mask) << mask
-        ip_addr = socket.inet_ntoa(struct.pack('L',prefix+suffix))
+        ip_addr = socket.inet_ntoa(struct.pack('L',(prefix+suffix)&0xffffffff))
 
         return ip_addr
 
@@ -79,7 +79,7 @@ class bgpParse:
 
         prefix = struct.unpack('L',socket.inet_aton(prefix))[0]
         suffix = ip << mask
-        ip_addr = socket.inet_ntoa(struct.pack('L',prefix+suffix))
+        ip_addr = socket.inet_ntoa(struct.pack('L',(prefix+suffix)&0xffffffff))
 
         return ip_addr
 
@@ -126,7 +126,7 @@ class bgpParse:
 #err_count = 0
 def geoloc_an_ip(ip,be_frugal=True):
     global gi,err_count
-    ip_str = socket.inet_ntoa(struct.pack('L',ip))
+    ip_str = socket.inet_ntoa(struct.pack('L',ip&0xffffffff))
     gir = gi.record_by_addr(ip_str)
     try:
         if be_frugal:
@@ -135,21 +135,17 @@ def geoloc_an_ip(ip,be_frugal=True):
         else:
             lat = gir['latitude']
             lon = gir['longitude']
-            ip = ip_str
     except:
         #err_count += 1
         #print "Error! %d" % (err_count)
-        if be_frugal:
-            return (None,None,ip)
-        else:
-            return (None,None,ip_str)
+        return (None,None,ip)
     return (lat,lon,ip)
 
 # print an ip address (unpack if necessary)
 def print_ip(ip):
     try:
         int(ip) # test if it's packed
-        return socket.inet_ntoa(struct.pack('L',ip))
+        return socket.inet_ntoa(struct.pack('L',ip&0xffffffff))
     except:
         return str(ip)
 
@@ -182,6 +178,7 @@ def do_print(geoloc_ip_sample, output_filename):
     except:
         print "Error generating output!"
         outfile.close()
+        raise
 
 # This prints the geoloc'd results for each AS as it computes them. This works
 # fine if your sample size is relatively small. For very small samples, you
@@ -196,7 +193,7 @@ def do_sample_and_print(bgp, sample_size, output_filename, maxsize=-1):
             count += 1
             print "(%d of %d) %s: %d" % (count, num_ases, asn, int(bgp.as_block_size(asn)))
             rand_ips = bgp.random_ips_from_as(asn,sample_size,maxsize=maxsize,pack=True)
-            geoloc_ip_sample = [geoloc_an_ip(x) for x in rand_ips]
+            geoloc_ip_sample = [geoloc_an_ip(x,False) for x in rand_ips]
             for mark in geoloc_ip_sample:
                 output_str = "%s %s %s %s\n" % (str(asn), str(mark[0]), str(mark[1]), print_ip(mark[2]))
                 outfile.write(output_str)
@@ -206,6 +203,7 @@ def do_sample_and_print(bgp, sample_size, output_filename, maxsize=-1):
     except:
         print "Error generating output!"
         outfile.close()
+        raise
 
 # This is my solution to taking very large samples where even a single AS's
 # samples won't easily fit in memory. We basically select a "target" sample and
