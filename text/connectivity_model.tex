@@ -1,7 +1,7 @@
     In order to study the impact of regional disaster, we augment a standard AS logical connectivity graph~\cite{caida-asgraph} with measurements of the geographic regions in which networks peer.
     We model the Earth as a geodesic globe inscribed in a sphere of the Earth's radius, and map latitude and longitude values to a face on the globe.
     We consider each face of the globe as a `region,' such that a worst-case disaster could destroy all of the physical routing infrastructure within the region.
-    We generate the geodesic globe using a standard algorithm~\cite{geodesic}, providing us with 327,680 triangular faces, each with average side length of \shaddi{m km} and area \shaddi{n km$^2$}.  
+    We generate the geodesic globe using a standard algorithm~\cite{geodesic}, providing us with 81,000 triangular faces, each with average side length of 100km and area 4700 km$^2$.  
     Finally, we map locations where ASes peer to faces on the globe.
     The same technique could be applied to intradomain connectivity for large networks, but we leave this analysis to future work.    
  
@@ -19,8 +19,9 @@
     If multiple of the IP addresses point to different locations, we elect the most common location, or in a tie, choose the location with the least distance from the others.
     If no DNS names are found, we repeat the same process with locations from the MaxMind GeoLite City database, which has better coverage that DNS geolocation, but worse accuracy~\cite{uhlig_ccr_paper}. 
     
-    The measurements we gathered from CAIDA, iPlane, and Aqualab allowed us to identify \justine{k} router-level AS adjacencies, which we mapped to \justine{p} unique latitude, longitude locations (\justine{f} using DNS, and a further \justine{g} using MaxMind). 
-    We mapped these adjacencies to \justine{h} unique faces of the geodesic globe.   
+    The measurements we gathered from CAIDA, iPlane, and Aqualab allowed us to identify 489,334 router-level AS adjacencies, which we mapped to 14,457 unique latitude, longitude locations (133,686 using DNS, and the remainder using MaxMind).
+    We then supplemented these measured adjacencies with 38,994 adjacencies from a ground-truth dataset~\cite{ixps-mapped}, bringing our total to 528,328 adjacencies in 14,571 uniqe latitude, longitude locations. 
+    We mapped these adjacencies to 2,900 unique faces of the geodesic globe.   
  
     \justine{Should I write why not map exchange poinst here?}
 
@@ -36,8 +37,8 @@
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=3.25in]{graph_all_match_ccdf}
-\caption[]{For ground truth peering locations, CCDF of distance to closest AS adjacency in our dataset using varying geolocation techniques. X-axis is in log scale.} 
+\includegraphics[width=3.25in]{graph_all_match}
+\caption[]{For ground truth peering locations, CCF of distance (kilometers) to closest AS adjacency in our measurement-based dataset. X-axis is in log scale. The average ground truth adjacency is within 100km of a measured adjacency, placing it in either in the same face or a face adjacent to its ground-truth location.} 
 %The $y$-axis is fraction of AS pairs with a path between them that traverses a service supporting AS. The $x$-axis is the fraction of ASes in the simulation topology supporting the service. }
 %Using MIRO~\cite{miro} style multipath allows networks to provide access to services 
 %even when their default path does not encounter a service-supporting AS.}
