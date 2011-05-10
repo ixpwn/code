@@ -19,55 +19,59 @@ governments~\cite{cyberspacepolicy} hence value the physical security of
 Internet infrastructure to disaster.
 }
 
-In this paper, we explore the impact of regional disasters on Internet connectivity
-using a new modeling technique, geodesic failure regionalization.
-While previous work in Internet resilience focused primarily on logical connectivity, 
-we map peering relationships to one or more geographic regions where peering takes place.
-We approximate geographic regions by generating a polyhedron whose faces
-represent a contiguous area suceptible to disaster. 
-We then use publicly available peering datasets~\cite{brice, peeringdb}, traceroutes, and DNS and commercial
-geolocation techniques to map locations where networks peer (exchange points or
- private peering facilities) to faces on the polyhedron.
-We use this model to simulate the impact of regional failures, \ie{} the removal of
-one or more faces, and investigate the following issues:
+In this paper, we explore the impact of regional disasters on Internet
+connectivity using a new modeling technique, geodesic failure regionalization.
+While previous work in Internet resilience focused primarily on logical
+connectivity, we map peering relationships to one or more geographic regions
+where peering takes place.  We approximate geographic regions by generating a
+polyhedron whose faces represent a contiguous area suceptible to disaster.  We
+then use publicly available peering datasets~\cite{brice, peeringdb},
+traceroutes, and DNS and commercial geolocation techniques to map locations
+where networks peer (exchange points or private peering facilities) to faces on
+the polyhedron.  We use this model to simulate the impact of regional failures,
+\ie{} the removal of one or more faces, and investigate the following issues:
 
-\noindent{\bf Regional Peering Redundancy.} How many regions do networks typically peer in? How does it scale with the degree of the network?
+\noindent{\bf Regional Peering Redundancy.} How many regions do networks
+typically peer in? How does it scale with the degree of the network?
 
-\noindent{\bf Quantifying Resilience.} Can we quantify the resiliance of a network to failure terms of it's number of peers, global footprint, and number of regions it peers in?
+\noindent{\bf Quantifying Resilience.} Can we quantify the resiliance of a
+network to failure terms of it's number of peers, global footprint, and number
+of regions it peers in?
 
-\noindent{\bf Identifying Worst-Case Scenarios.} Are there bottlenecks in the physical connectivity graph? How badly could the network partition in a worst-case regional disaster?
+\noindent{\bf Identifying Worst-Case Scenarios.} Are there bottlenecks in the
+physical connectivity graph? How badly could the network partition in a
+worst-case regional disaster?
 
 We are not the first to evaluate Internet resilience to
 failures~\cite{michigan, measuringresilience, resilience-under-BGP,
-resilience-complex-networks}.  Our contribution is to consider the impact of physical
-disaster on the observed connectivity map.  Previous work focused on
+resilience-complex-networks}.  Our contribution is to consider the impact of
+physical disaster on the observed connectivity map.  Previous work focused on
 the impact of severing logical links, that is, declaring that two networks had
-been entirely disconnected.  This type of model cannot capture the network impact
-of physical disaster.  For example, it is highly unlikely that two Tier
+been entirely disconnected.  This type of model cannot capture the network
+impact of physical disaster.  For example, it is highly unlikely that two Tier
 1 networks would be partitioned in any single event.  These networks have
-global footprints and connect at multiple physical locations.
-  On the other hand, disconnecting logical links
-one by one ignores the physical reality that any disaster that strikes a link
-in shared infrastructure such as an IXP is likely to impact a large number of
-links.  In this case, modeling failure of a single logical link is an
-underestimate.  We argue that focusing on physical connectivity is the best way to
-develop models of the impact of physical disaster. 
+global footprints and connect at multiple physical locations.  On the other
+hand, disconnecting logical links one by one ignores the physical reality that
+any disaster that strikes a link in shared infrastructure such as an IXP is
+likely to impact a large number of links.  In this case, modeling failure of a
+single logical link is an underestimate.  We argue that focusing on physical
+connectivity is the best way to develop models of the impact of physical
+disaster. 
 
 
-Before we move forward, we clarify the scope of our goals.  
-Evaluations of AS-level connectivity graphs show that traceroute-based
-topologies like those that we rely upon are in many ways
-incomplete~\cite{walter}.  For instance, policy compliant routing ensures that
-measurements made with only limited vantage points cannot observe peering
-relationships between networks where neither network contains a measurement
-vantage point.  Further, `backup links', which are provisioned for the case of
-failure but otherwise unused, cannot be observed since no traffic flows across
-these links when the primary links are available.  These and other impediments
-mean that any analysis over measurement-based graphs may be missing critical
-information.  Thus, the results of our study should not be considered hard and
-fast projections of Internet connectivity.  Instead, we aim only to provide
-{\it estimates} and {\it bounds} on the impact of regional disaster on Internet
-routing.
+Before we move forward, we clarify the scope of our goals.  Evaluations of
+AS-level connectivity graphs show that traceroute-based topologies like those
+that we rely upon are in many ways incomplete~\cite{walter}.  For instance,
+policy compliant routing ensures that measurements made with only limited
+vantage points cannot observe peering relationships between networks where
+neither network contains a measurement vantage point.  Further, `backup links',
+which are provisioned for the case of failure but otherwise unused, cannot be
+observed since no traffic flows across these links when the primary links are
+available.  These and other impediments mean that any analysis over
+measurement-based graphs may be missing critical information.  Thus, the
+results of our study should not be considered hard and fast projections of
+Internet connectivity.  Instead, we aim only to provide {\it estimates} and
+{\it bounds} on the impact of regional disaster on Internet routing.
 
 Our results estimate that \justine{\ldots}
 
