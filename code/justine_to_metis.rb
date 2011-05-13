@@ -11,8 +11,8 @@ ignoreMissingLatLng = true
 
 if !(ARGV.size == 6)
   print "Usage: #{$0} "
-  print "-t <adjacency lat/lng to triangle lat/lng file> "
   print "-a <asn adjacency to lat/lng file> "
+  print "-t <adjacency lat/lng to triangle lat/lng file> "
   print "-o <output file name> "
   puts ""
   exit
@@ -60,6 +60,8 @@ triFile.each{|line|
     assert(!$3.include?(" "), "Triangle lat includes a space! #{$3}")
     assert(!$4.include?(" "), "Triangle lat includes a space! #{$4}")
 
+#    puts "(#{aLat},#{aLng}) (#{tLat},#{tLng})"
+
     hshTri[LatLng.new(aLat,aLng)] = LatLng.new(tLat,tLng)
   else
     assert(false, "Not match: #{line}")
@@ -74,13 +76,15 @@ c = 0
 hshALatLng = Hash.new
 adjFile = File.open(adjFilename)
 adjFile.each{|line|
-  if line =~ /^(.+) (.+) (.+) (.+)/
+  if line =~ /^(\S+) (\S+) (\S+) (\S+)/
     asn1 = $1.to_i
     asn2 = $2.to_i
     lat = $3.to_f
     lng = $4.to_f
 #    lat = $3
 #    lng = $4
+
+#    puts "(#{$1}) (#{$2}) (#{$3}) (#{$4})"
 
     c += 1
 
@@ -97,6 +101,7 @@ adjFile.each{|line|
       hshASN[asn2] = true
     else
       cMissingLatLng += 1
+#      puts "(#{lat},#{lng})"
       if !ignoreMissingLatLng
         assert(false, "lat/lng with no triangle match")
       end
