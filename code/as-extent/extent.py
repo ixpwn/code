@@ -18,29 +18,31 @@ def distance(origin, destination):
 
     return d
 
-# check the "best" cluster first
-def add_to_cluster(clusters,pt):
+# check the "closest" cluster first: this speeds things up significantly for AS's
+# with large prefix samples.
+def add_to_cluster(clusters,pt,threshold):
     clusters_by_dist = dict()
+
     for c in clusters:
         dist = distance(pt, c[0])
         if dist in clusters_by_dist:
             dist += random.random()
         clusters_by_dist[dist] = c
 
-    # keys should be in sorted order automatically
+    # keys may be in sorted order automatically, but just to be sure...
     for dist in sorted(clusters_by_dist.keys()):
         c = clusters_by_dist[dist]
         for item in c:
            if distance(item,pt) < threshold:
-               c.append(item)
+               c.append(pt)
                return True
     return False
 
 # agglomerative clustering
-def generate_clusters(list_of_pts):
+def generate_clusters(list_of_pts,threshold):
     clusters = list()
     for pt in list_of_pts:
-        if add_to_cluster(clusters,pt):
+        if add_to_cluster(clusters,pt,threshold):
             continue
 
         new_cluster = [pt]
@@ -54,22 +56,26 @@ def fill_in_clusters(clusters,asn=-1):
         lats = [i[0] for i in c]
         lons = [i[1] for i in c]
 
+
         min_lat = min(lats)
         min_lon = min(lons)
         max_lat = max(lats)
         max_lon = max(lons)
-
-        #print "%.2f %.2f %.2f %.2f" % (min_lat, max_lat, min_lon, max_lon)
+    
+        print "cluster len: %d | %.2f %.2f %.2f %.2f" % (len(c),min_lat, max_lat, min_lon, max_lon)
 
         for ln in xrange(int(min_lon*10),int(max_lon*10 + 0.5)+1):
             for lt in xrange(int(min_lat*10),int(max_lat*10 + 0.5)+1):
-                print "%f %f %d" % (ln/10., lt/10., asn) 
+                print "RESULT %f %f %d" % (ln/10., lt/10., asn) 
 
 def split_input(line):
     asn, lat, lon = line.split() 
     return [asn, lat, lon]
 
 if __name__ == "__main__":
+    threshold = sys.argv[1]
+    threshold = len(threshold)
+
     current_asn = -1
     current_asn_pts = list()
     
@@ -90,7 +96,7 @@ if __name__ == "__main__":
         if not asn == current_asn:
             print "old asn: %d new asn: %d" % (current_asn, asn)
             # finish current
-            clusters = generate_clusters(current_asn_pts)
+            clusters = generate_clusters(current_asn_pts,threshold)
             print "clusters generated"
             fill_in_clusters(clusters,current_asn)
             print "done"

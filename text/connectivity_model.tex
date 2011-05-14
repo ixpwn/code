@@ -1,11 +1,11 @@
 
 In order to study the impact of regional disaster, we augment a standard AS
 logical connectivity graph~\cite{caida-asgraph} with measurements of the
-geographic regions in which networks peer.  We model the Earth as a geodesic
-globe inscribed in a sphere of the Earth's radius, and map latitude and
-longitude values to a face on the globe.  We consider each face of the globe as
-a `region,' such that a worst-case disaster could destroy all of the physical
-routing infrastructure within the region.  We generate the geodesic globe using
+geographic regions in which networks peer.  We construct a grid of roughly
+equal-area hexagonal cells which tile the Earth's surface, and map latitude and
+longitude coordinates to a cell in the grid.  We consider each cell of the globe
+as a `region,' such that a worst-case disaster could destroy all of the physical
+routing infrastructure within the region.  This results in an Icosahedral  
 a standard algorithm~\cite{geodesic}, providing us with 81,000 triangular
 faces, each with average side length of 100km and area 4700 km$^2$.  Finally,
 we map locations where ASes peer to faces on the globe.  The same technique
