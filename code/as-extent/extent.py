@@ -47,7 +47,6 @@ def add_to_cluster(clusters,pt,threshold):
 # two. I think the fact we sort the points first mitigates this issue.
 def generate_clusters(list_of_pts,threshold):
     clusters = list()
-    print threshold
     for pt in list_of_pts:
         if add_to_cluster(clusters,pt,threshold):
             continue
@@ -58,7 +57,7 @@ def generate_clusters(list_of_pts,threshold):
     return clusters
 
 # this assumes square bounding box for now, for simplicity
-def fill_in_clusters(clusters,asn=-1):
+def fill_in_clusters(clusters,asn,threshold):
     for c in clusters:
         lats = [i[0] for i in c]
         lons = [i[1] for i in c]
@@ -69,11 +68,11 @@ def fill_in_clusters(clusters,asn=-1):
         max_lon = max(lons)
    
         if min_lat!=max_lat or min_lon!=max_lon:
-            print "cluster len: %d asn: %d | %.2f %.2f %.2f %.2f *" \
-                % (len(c), asn, min_lat, max_lat, min_lon, max_lon)
+            print "c_size: %d thresh: %d asn: %d | %.2f %.2f %.2f %.2f *" \
+                % (len(c), threshold, asn, min_lat, max_lat, min_lon, max_lon)
         else:
-            print "cluster len: %d asn %d | %.2f %.2f %.2f %.2f" \
-                % (len(c), asn, min_lat, max_lat, min_lon, max_lon)
+            print "c_size: %d thresh: %d asn: %d | %.2f %.2f %.2f %.2f" \
+                % (len(c), threshold, asn, min_lat, max_lat, min_lon, max_lon)
 
 
         for ln in xrange(int(min_lon*10),int(max_lon*10 + 0.5)+1):
@@ -108,7 +107,7 @@ if __name__ == "__main__":
         if not asn == current_asn:
             # finish current
             clusters = generate_clusters(current_asn_pts,threshold)
-            fill_in_clusters(clusters,current_asn)
+            fill_in_clusters(clusters,current_asn,threshold)
 
             # start processing over
             current_asn = asn
@@ -116,5 +115,5 @@ if __name__ == "__main__":
             
         current_asn_pts.append([lat,lon])
 
-    clusters = generate_clusters(current_asn_pts)
-    fill_in_clusters(clusters,current_asn)
+    clusters = generate_clusters(current_asn_pts,threshold)
+    fill_in_clusters(clusters,current_asn,threshold)
