@@ -44,44 +44,14 @@ for line in asrel:
             replacements[asn1] = list()
             replacements[asn1].append(asn2)
 
-    # in a sibling line, asn1 is a "canonical" form; map all asn2 to asn1
-    # unless something already maps to asn2
-#    elif rel==2:
-#        #if asn2 in siblings and not siblings[asn2] == asn1:
-#        if asn2 in siblings:
-#            # it already maps to something!
-#            print "SIB ERROR %d %d" % (asn2, asn1)
-#        siblings[asn2] = asn1
-#        
-#    elif rel==2:
-#       try:
-#            low = min(asn1,asn2)
-#            high = max(asn1,asn2)
-#
-#
-#            if not high in siblings[low]:
-#                siblings[high] = siblings[low]
-#                siblings[low].append(high)
-#        except:
-#            siblings[low] = list()
-#            siblings[high] = siblings[low]
-#            siblings[low].append(high)
+for line in sys.stdin:
+    line = line.rstrip()
+    a,b,c,asn,d,e = line.split()
 
-for k in replacements:
-    print "%d: %s" % (k, str(replacements[k]))
+    asn = int(asn)
 
-#for k in siblings:
-#    print "SIB %d: %s" % (k, str(siblings[k]))
-
-#rev_sibs = dict()
-#for k in siblings:
-#    print siblings[k]
-#    for v in siblings[k]:
-#        if v in rev_sibs:
-#            raise ValueError
-#        rev_sibs[v] = k
-#
-#for k in rev_sibs:
-#    print "SIB %d: %s" % (k, str(rev_sibs[k]))
-#
-
+    if asn in replacements:
+        for provider in replacements[asn]:
+            print "%s %s %s %d %s %s" % (a,b,c,provider,d,e)
+    else:
+        print line
