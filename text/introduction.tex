@@ -1,3 +1,5 @@
+
+
 Earthquakes, hurricanes, and other large-scale disasters cause widespread damage
 to physical infrastructure, and Internet routing infrastructure is no exception.
 In 2006, an earthquake in Taiwan severed six of seven 
@@ -31,6 +33,17 @@ geolocation techniques to map locations where networks peer (exchange points or
 We use this model to simulate the impact of regional failures, \ie{} the removal of
 one or more faces, and investigate the following issues:
 
+\eat{
+\begin{figure}[tb]
+\centering
+\includegraphics[width=2.75in]{illustration.jpg}
+\caption[]{\label{fig:dinosaur} Dinosaur uprisings are a major threat to regional and national infrastructure. Under dinosaur attack, Internet connectivity infrastrucure would be a primary target for air strikes.} 
+\end{figure}
+}
+
+\eat{
+}
+
 \noindent{\bf Regional Peering Redundancy.} How many regions do networks typically peer in? How does it scale with the degree of the network?
 
 \noindent{\bf Quantifying Resilience.} Can we quantify the resiliance of a network to failure terms of it's number of peers, global footprint, and number of regions it peers in?
@@ -52,6 +65,13 @@ in shared infrastructure such as an IXP is likely to impact a large number of
 links.  In this case, modeling failure of a single logical link is an
 underestimate.  We argue that focusing on physical connectivity is the best way to
 develop models of the impact of physical disaster. 
+ 
+\begin{figure*}[htb]
+\centering
+\includegraphics[width=6in]{world_map.jpg}
+\caption[]{\label{fig:worldmap} \shaddi{Fig porfavor} Illustration of geodesic cells, or failure regions, on the world map. Shaded cells are regions which include two or more networks peering. The average cell includes \kristin{n} ASes involved in \kristin{m} peering relationships.} 
+\end{figure*}
+
 
 
 Before we move forward, we clarify the scope of our goals.  
@@ -71,5 +91,7 @@ routing.
 
 Our results estimate that \justine{\ldots}
 
-The remainder of the paper is organized as follows \justine{\ldots}:.
-
+The remainder of the paper is organized as follows. In \S\ref{sec:connectivity_model}, we describe our model of global connectivity.
+In \S\ref{sec:quant_connect}, we provide basic observations of our data quantifying how often transit networks peer and in how many different geographic regions.
+Completing our analysis, we describe our failure analysis in \S\ref{sec:failures}.
+Finally, we describe related work in  \S\ref{sec:related_work} and conclude in \S\ref{sec:conclusion}.
