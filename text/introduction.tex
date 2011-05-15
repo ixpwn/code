@@ -1,3 +1,5 @@
+
+
 Earthquakes, hurricanes, and other large-scale disasters cause widespread damage
 to physical infrastructure, and Internet routing infrastructure is no exception.
 In 2006, an earthquake in Taiwan severed six of seven 
@@ -50,14 +52,19 @@ the impact of severing logical links, that is, declaring that two networks had
 been entirely disconnected.  This type of model cannot capture the network
 impact of physical disaster.  For example, it is highly unlikely that two Tier
 1 networks would be partitioned in any single event.  These networks have
-global footprints and connect at multiple physical locations.  On the other
-hand, disconnecting logical links one by one ignores the physical reality that
-any disaster that strikes a link in shared infrastructure such as an IXP is
-likely to impact a large number of links.  In this case, modeling failure of a
-single logical link is an underestimate.  We argue that focusing on physical
-connectivity is the best way to develop models of the impact of physical
-disaster. 
-
+global footprints and connect at multiple physical locations.
+  On the other hand, disconnecting logical links
+one by one ignores the physical reality that any disaster that strikes a link
+in shared infrastructure such as an IXP is likely to impact a large number of
+links.  In this case, modeling failure of a single logical link is an
+underestimate.  We argue that focusing on physical connectivity is the best way to
+develop models of the impact of physical disaster. 
+ 
+\begin{figure*}[htb]
+\centering
+\includegraphics[width=6in]{world_map.jpg}
+\caption[]{\label{fig:worldmap} \shaddi{Fig porfavor} Illustration of geodesic cells, or failure regions, on the world map. Shaded cells are regions which include two or more networks peering. The average cell includes \kristin{n} ASes involved in \kristin{m} peering relationships.} 
+\end{figure*}
 
 Before we move forward, we clarify the scope of our goals.  Evaluations of
 AS-level connectivity graphs show that traceroute-based topologies like those
@@ -75,5 +82,7 @@ Internet connectivity.  Instead, we aim only to provide {\it estimates} and
 
 Our results estimate that \justine{\ldots}
 
-The remainder of the paper is organized as follows \justine{\ldots}:.
-
+The remainder of the paper is organized as follows. In \S\ref{sec:connectivity_model}, we describe our model of global connectivity.
+In \S\ref{sec:quant_connect}, we provide basic observations of our data quantifying how often transit networks peer and in how many different geographic regions.
+Completing our analysis, we describe our failure analysis in \S\ref{sec:failures}.
+Finally, we describe related work in  \S\ref{sec:related_work} and conclude in \S\ref{sec:conclusion}.

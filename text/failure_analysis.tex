@@ -1,0 +1,33 @@
+    \begin{table}
+        \centering
+        \begin{tabular}{lc|l|l|l|l|l|l}
+            &&\multicolumn{6}{c}{\bf Number of Partitions}\\
+            &&{\bf 2}&{\bf 4}&{\bf 8}&{\bf 16}&{\bf 32}&{\bf 64}\\
+            \hline
+            \multirow{5}{*}{\begin{sideways}{\bf Imbalance}\end{sideways}}
+            &{\bf 1\%}&123&456&789&1000&1700&1702\\
+            &{\bf 2\%}&123&456&789&1000&1700&1702\\
+            &{\bf 3\%}&123&456&789&1000&1700&1702\\
+            &{\bf 5\%}&123&456&789&1000&1700&1702\\
+            &{\bf 10\%}&123&456&789&1000&1700&1702\\
+        \end{tabular}
+        \caption[]{\label{tbl:hmetis} Number of cells to remove in order to fully partition the network, such that no users from one partition can communicate with any user in another partition. Columns indicate the number of desired partitions, and rows indicate the imbalance in size between the partitions (where 1\% is approximately even, and 10\% means that one partition may be up to 10\% larger than another partition). \kristin{fill in numbers}}
+    \end{table}
+        
+    Turning to our final goal, analysis of worst-case scenarios, we attend to two questions. 
+    First, how much physical disaster would be required to fully partition the network?         
+    Second, are there regional bottlenecks in the physical connectivity graph?
+
+    \subsubsection*{Network Partitioning}
+    We whimsically address an action-movie style disaster with the first question: how many physical disasters would it take for half of all prefixes to be in one partition, and half of all prefixes to be in another, such that no users in one partition can speak to the users in another partition?
+    While the question is somewhat outrageous, the answer illuminates the redundancy of geographic connectivity accross the globe, as we find that minimum cuts across our regional connectivity graph are quite large.
+    
+    To address this question, we use the {\tt hmetis} software package~\cite{hmetis} to discover balanced graph cuts.
+    {\tt hmetis} uses \justine{technique...?} to discover minimum cuts that leave behind a balanced number of vertices on either side of the cut.
+    \justine{what do we feed in to hmetis. need to weight by pfx.}     
+ 
+    \subsubsection*{Regional Bottlenecks}
+    We now turn to a more practical question of recent political interest: regional bottlenecks in connectivity.
+    Recent events in Iran~\cite{iran}, Egypt~\cite{egypt}, and China~\cite{china} exemplify the implcations of the fact that each nation's connectivity to the outside world traverses one or a handfull of egress points.
+    This leaves the countries vulnerable to malicious or accidental failure at these bottlenecks.
+    We seek to identify regions which are similarly vulnerable, by once again examining our regional connectivity graph. 

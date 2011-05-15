@@ -12,6 +12,8 @@
 %\usepackage{multicol}
 %\usepackage{amsmath, amssymb, amsthm}
 %\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{rotating}
 %\onehalfspacing
 
 %COMMENT FOR FINAL VERSION
@@ -50,7 +52,7 @@
     University of California, Berkeley\titlenote{Authors listed
     alphabetically.}\\\\
         \large
-        {\it Draft: Please Do Not Distribute}}
+        {\it CS270 Final Project}}
         \normalsize
 %\author{Paper \#69, 14 Pages}
 \date{}
@@ -82,18 +84,24 @@
         \input{introduction}
 
     \section{Connectivity Model}
+        \label{sec:connectivity_model}
         \input{connectivity_model}
 
-    \section{Quantifying Connectivity}
+    \section{Measuring Connectivity}
+        \label{sec:quant_connect}
         \input{quant_connect}
 
-    \section{Regional Failure Analysis} 
-    
+    \section{Regional Failure Analysis}
+        \label{sec:failures} 
+        \input{failure_analysis}
+        
     \section{Related Work}
-    \input{related_work}
+        \label{sec:related_work}
+        \input{related_work}
 
     \section{Conclusion}
-        \tbd{restate what we did and what we found}
+        \label{sec:conclusion}    
+    \tbd{restate what we did and what we found}
     \tbd{our conclusions: network operators need not just logical but
     physical redundancy - diversity of location. also, tradeoff between
     efficient exchange in IXPs (getting lots of people to same place) and
