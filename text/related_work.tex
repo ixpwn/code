@@ -110,20 +110,21 @@ measurement studies, and network infrastructure security policy.
     tables, active traceroute and ping measurements, and other sources to
     provide the most accurate IXP membership datasets available to date.
 
-    \eat{Cai et
-        al.  propose an organization-based model of the Internet that takes into
-        account the fact that a single organization may control multiple
-        ASes~\cite{as-to-org}. While our analysis here treats each AS as an
-        individual organization, the techniques we use easily generalize to a
-        topology model that accurately incorporates these relationships.  \shaddi{I
-        think this means that our model /underestimates/ the degree of resilience,
-        but that's going to depend on what our graph looks like.I'd imagine that
-        there are going to be missing AS links in our model that will cause us to
-        violate our assumption that each administrative entity (organization) is
-        well connected and cannot be partitioned.} \justine{Agreed that the Cai
-        work enhances AS level graphs, but (1) the graphs that we have do take in
-        to account AS `sibling' relationships, and (2) I don't think we're planning
-        on focusing on policy? Or are we? Either way I think (1) means we should
+    \eat{
+        Cai et al.  propose an organization-based model of the Internet that
+        takes into account the fact that a single organization may control
+        multiple ASes~\cite{as-to-org}. While our analysis here treats each AS
+        as an individual organization, the techniques we use easily generalize
+        to a topology model that accurately incorporates these relationships.
+        \shaddi{I think this means that our model /underestimates/ the degree
+        of resilience, but that's going to depend on what our graph looks
+        like.I'd imagine that there are going to be missing AS links in our
+        model that will cause us to violate our assumption that each
+        administrative entity (organization) is well connected and cannot be
+        partitioned.} \justine{Agreed that the Cai work enhances AS level
+        graphs, but (1) the graphs that we have do take in to account AS
+        `sibling' relationships, and (2) I don't think we're planning on
+        focusing on policy? Or are we? Either way I think (1) means we should
         cut the Cai ref.} \kristin{I agree and have eatten it}
 
         {\bf Network Security Policy.}
