@@ -10,7 +10,7 @@
     \begin{figure}[tb]
 \centering
 \includegraphics[width=3.25in]{scatter}
-\caption[]{\label{fig:scatter} Scatter plot of observed peers to cells with peering adjacencies. Each point represents an AS which has peering in $x$ cells of the globe, with $y$ total peers. A linear regression (shown) predicts the ratio of cells to peers to be .625 in the average case.} 
+\caption[]{\label{fig:scatter} Scatter plot of observed peers to cells with peering adjacencies. Each point represents an AS which has peering in $x$ cells of the globe, with $y$ total peers. A linear regression (shown) predicts the ratio of cells to peers to be .625 in the average case, while the median case is a 1:1 ratio.} 
 \end{figure}
 
 \begin{figure}[tb]
@@ -40,7 +40,9 @@
 
     To better investigate this ratio, Figure~\ref{fig:ratio} shows a CCDF of the number of peering cells to number of peers for Tier 1 networks, Large networks (more than 250 peers), Small networks (less than 250 peers), and All networks. 
     Thus, a given $(x,y)$ coordinate means that $y$ fraction of of networks had a ratio larger than $x$ peers for every peering point.
-    Here we observe that \justine{\ldots}, this shows that \ldots
+    Here we observe that the average large network has a ratio of .653, while the average small network has a ratio of 1.
+    This is because large networks often peer with multiple small networks with whom they only peer in a small fraction of their peering points, while smaller networks often peer with more widespread providers and in a more limited number of locations.
+    \justine{This is pure bullshit. I am not sure why and we should - LATER - take time to investigate these graphs.}
 
 \subsubsection*{Peering Redundancy}
     Networks not only maintain multiple peering relationships in multiple locations, but have redundant peering connections in different regions with the same peers.
