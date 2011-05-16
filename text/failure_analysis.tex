@@ -1,17 +1,17 @@
     \begin{table}
         \centering
         \begin{tabular}{lc|l|l|l|l|l|l}
-            &&\multicolumn{6}{c}{\bf Number of Partitions}\\
-            &&{\bf 2}&{\bf 4}&{\bf 8}&{\bf 16}&{\bf 32}&{\bf 64}\\
+            &&\multicolumn{5}{c}{\bf Number of Partitions}\\
+            &&{\bf 2}&{\bf 4}&{\bf 8}&{\bf 16}&{\bf 32}\\
             \hline
-            \multirow{5}{*}{\begin{sideways}{\bf Imbalance}\end{sideways}}
-            &{\bf 1\%}&123&456&789&1000&1700&1702\\
-            &{\bf 2\%}&123&456&789&1000&1700&1702\\
-            &{\bf 3\%}&123&456&789&1000&1700&1702\\
-            &{\bf 5\%}&123&456&789&1000&1700&1702\\
-            &{\bf 10\%}&123&456&789&1000&1700&1702\\
+            \multirow{5}{*}{\begin{sideways}{\bf Imbalance (\%)}\end{sideways}}
+            &{\bf 5}&1036&1520&1818&1993&2087\\
+            &{\bf 10}&1045&1495&1809&1987&2085\\
+            &{\bf 15}&1031&1481&1798&1981&2097\\
+            &{\bf 20}&1000&1482&1787&1971&2090\\
+            &{\bf 25}&986&1464&1777&1965&2085\\
         \end{tabular}
-        \caption[]{\label{tbl:hmetis} Number of cells to remove in order to fully partition the network, such that no users from one partition can communicate with any user in another partition. Columns indicate the number of desired partitions, and rows indicate the imbalance in size between the partitions (where 1\% is approximately even, and 10\% means that one partition may be up to 10\% larger than another partition). \kristin{fill in numbers}}
+        \caption[]{\label{tbl:hmetis} Number of cells to remove in order to fully partition the network, such that no users from one partition can communicate with any user in another partition. Columns indicate the number of desired partitions, and rows indicate the allowed imbalance between the largest partition and the average size (so for imbalance 5\%, k partitions, and n cells a partition cannot be more than $1.05 * \frac{n}{k}$). \kristin{fill in numbers}}
     \end{table}
         
     Turning to our final goal, analysis of worst-case scenarios, we attend to two questions. 
