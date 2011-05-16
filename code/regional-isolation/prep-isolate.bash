@@ -12,7 +12,7 @@ CLUSTERS=$1
 EXTENT=$2
 
 # create sorted file of number of failure points per ASN
-cat $CLUSTERS | python cluster2ixps.py | sort | uniq | cut -f1 -d" " | uniq -c | sort -n > fp-per-asn
+cat $CLUSTERS | python cluster2ixps.py | sort | uniq | cut -f1 -d" " | sort -n | uniq -c | sort -n > fp-per-asn
 
 # sort extent file by ASN
 cat $EXTENT | sort -n -k3 -n -k4 > cells.sorted
