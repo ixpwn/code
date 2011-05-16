@@ -27,7 +27,7 @@ While previous work in Internet resilience focused primarily on logical
 connectivity, we map peering relationships to one or more geographic regions
 where peering takes place.  We approximate geographic regions by generating a
 polyhedron whose faces represent a contiguous area suceptible to disaster.  We
-then use publicly available peering datasets~\cite{brice, peeringdb},
+then use publicly available peering datasets~\cite{ixps-mapped, peeringdb},
 traceroutes, and DNS and commercial geolocation techniques to map locations
 where networks peer (exchange points or private peering facilities) to faces on
 the polyhedron.  We use this model to simulate the impact of regional failures,
@@ -63,7 +63,7 @@ develop models of the impact of physical disaster.
 \begin{figure*}[htb]
 \centering
 \includegraphics[width=6in]{world_map.jpg}
-\caption[]{\label{fig:worldmap} \shaddi{Fig porfavor} Illustration of geodesic cells, or failure regions, on the world map. Shaded cells are regions which include two or more networks peering. The average cell includes \kristin{n} ASes involved in \kristin{m} peering relationships.} 
+\caption[]{\label{fig:worldmap} \shaddi{Fig porfavor} Illustration of geodesic cells, or failure regions, on the world map. Shaded cells are regions which include two or more networks peering. The median cell includes 9 ASes involved in 7 peering relationships.} 
 \end{figure*}
 
 Before we move forward, we clarify the scope of our goals.  Evaluations of
