@@ -1,9 +1,9 @@
     In order to study the impact of regional disaster, we augment a standard AS logical connectivity graph~\cite{caida-asgraph} with measurements of the geographic regions in which networks peer.
     We model the Earth as a geodesic globe inscribed in a sphere of the Earth's radius, and map latitude and longitude values to a face on the globe.
     We consider each face of the globe as a `region,' such that a worst-case disaster could destroy all of the physical routing infrastructure within the region.
-    We generate the geodesic globe using a standard algorithm~\cite{geodesic}, providing us with 65,612 hexagonal cells, each with average width of 99.5 km and area 7,774.2 km$^2$.  
-    Dividing the globe in to cells allows us to cleanly model the concept of a `region' - a region is one cell, or a set of contiguous cells, all suceptible to the impact of shared event. 
-     
+    We generate this globe using the Icosahedral Snyder Equal Area global grid system~\cite{discrete-global-grids}, obtaining 65,612 hexagonal cells, each with average width 99.5 km and area 7,774.2km$^2$.
+    Dividing the globe in to cells allows us to cleanly model the concept of a `region' - a region is one cell, or a set of contiguous cells, all susceptible to the impact of shared event. 
+
     We map every location where peering takes place to a cell on the globe, and use the resulting grid to perform our analysis of interdomain connectivity.
     We generate peering locations using a combination of an Internet Exchange Point dataset~\cite{ixps-mapped}, and observed router-level AS adjacencies from the CAIDA Internet Topology Data Kit (ITDK)~\cite{itdk}.
     The ITDK is a router-level Internet map generated from traceroute, mrinfo, and other active measurement data.
@@ -14,11 +14,12 @@
     
     Figure~\ref{fig:worldmap} illustrates our model and our data.
     The ITDK and IXP Mapping datasets provided us with 367,744 and 38,994 adjacencies between non-stub ASes (respectively), mapping to 2536 cells.
-    The average cell contained adjecencies for 63.8 ASes and 150.9 AS pairs.
+    The average cell contained adjacencies for 63.8 ASes and 150.9 AS pairs.
     The median cell contained adjacencies for 9 ASes and 7 AS pairs.
     We observe that cell density is heavier in the United States and Europe, which is consistent with the higher density of Internet connectivity in these regions compared to the rest of the world.
     However, this also may be an artifact of the limitations of commercial geolocation, which provide better city-level granularity in Europe and the United States than in other areas of the world, where IP addresses are more likely to map to the capitol city of their country.
-    We also observe...\shaddi{?} 
+    In particular, commercial geolocation databases such as MaxMind focus on end-host locations, not the locations of core routers.
+    Because MaxMind maps entire groups of IP addresses to a single location, many core routers are likely inaccurately geolocated to the locations of an AS's end-host  customers.
 
 \eat{ 
     We develop our peering dataset by borrowing techniques and data from
@@ -37,5 +38,5 @@
     If no DNS names are found, we repeat the same process with locations from the MaxMind GeoLite City database, which has better coverage that DNS geolocation, but worse accuracy~\cite{uhlig_ccr_paper}. 
     
     The measurements we gathered from CAIDA, iPlane, and Aqualab allowed us to identify 489,334 router-level AS adjacencies, which we mapped to 14,457 unique latitude, longitude locations (133,686 using DNS, and the remainder using MaxMind).
-    We then supplemented these measured adjacencies with 38,994 adjacencies from a ground-truth dataset~\cite{ixps-mapped}, bringing our total to 528,328 adjacencies in 14,571 uniqe latitude, longitude locations. 
+    We then supplemented these measured adjacencies with 38,994 adjacencies from a ground-truth dataset~\cite{ixps-mapped}, bringing our total to 528,328 adjacencies in 14,571 unique latitude, longitude locations. 
 }

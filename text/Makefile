@@ -53,7 +53,7 @@ submit:
 
 
 clean:
-	rm -f *.dvi *.ps *.pdf *.aux *.bbl *.blg *.ent *.log *.out $(DRAFT_SETTINGS)
+	rm -f *.dvi resilience.pdf *.aux *.bbl *.blg *.ent *.log *.out $(DRAFT_SETTINGS)
 
 
 
