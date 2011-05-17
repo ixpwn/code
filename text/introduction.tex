@@ -6,7 +6,7 @@ In 2006, an earthquake in Taiwan severed six of seven
 undersea cables connecting North and Southeast Asia with each other and North 
 America. 
 Regional disasters like these have the potential to generate substantial 
-correlated failures when multiple links disconnect and entire Exchange Points
+correlated failures when multiple links disconnect and entire exchange points
 go dark.
 
 \eat{
@@ -26,23 +26,21 @@ connectivity using a new modeling technique, geodesic failure regionalization.
 While previous work in Internet resilience focused primarily on logical
 connectivity, we map peering relationships to one or more geographic regions
 where peering takes place.  We approximate geographic regions by generating a
-polyhedron whose faces represent a contiguous area suceptible to disaster.  We
+polyhedron whose cells represent a contiguous area suceptible to disaster.  We
 then use publicly available peering datasets~\cite{ixps-mapped, peeringdb},
 traceroutes, and DNS and commercial geolocation techniques to map locations
 where networks peer (exchange points or private peering facilities) to faces on
 the polyhedron.  We use this model to simulate the impact of regional failures,
-\ie{} the removal of one or more faces, and investigate the following issues:
+\ie{} the removal of one or more cells on th epolyhedron, and investigate the following issues:
 
 \noindent{\bf Regional Peering Redundancy.} How many regions do networks
 typically peer in? How does it scale with the degree of the network?
 
 \noindent{\bf Quantifying Resilience.} Can we quantify the resiliance of a
-network to failure terms of it's number of peers, global footprint, and number
-of regions it peers in?
+region in terms of the diversity of geographic paths it's traffic can take to external networks?
 
-\noindent{\bf Identifying Worst-Case Scenarios.} Are there bottlenecks in the
-physical connectivity graph? How badly could the network partition in a
-worst-case regional disaster?
+\noindent{\bf Identifying Worst-Case Scenarios.} Are there bottlenecks in geographic connectivity, such that large regions share the fate of a few cells?
+    What would it take to fully partition the AS connectivity graph?
 
 We are not the first to evaluate Internet resilience to
 failures~\cite{michigan, measuringresilience, resilience-under-BGP,
@@ -80,8 +78,9 @@ results of our study should not be considered hard and fast projections of
 Internet connectivity.  Instead, we aim only to provide {\it estimates} and
 {\it bounds} on the impact of regional disaster on Internet routing.
 
-Our results estimate that \justine{\ldots}
-
+        Our data demonstrates that most transit-providing networks peer in redundant locations, such that small physical disasters ar unlikely to partition two peering networks.    
+    However, our data also includes geographic regions served by only a limited number of ASes with limited peering to external networks, leaving these geographic regions suceptible to disconnection after damage to only a few regions containing all of their egress connectivity.
+ 
 The remainder of the paper is organized as follows. In \S\ref{sec:connectivity_model}, we describe our model of global connectivity.
 In \S\ref{sec:quant_connect}, we provide basic observations of our data quantifying how often transit networks peer and in how many different geographic regions.
 Completing our analysis, we describe our failure analysis in \S\ref{sec:failures}.
