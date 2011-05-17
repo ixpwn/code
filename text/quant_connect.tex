@@ -25,8 +25,8 @@
  
 
 
-    We now provide some basic observations of our data: the number of regions ASes peer in, and how many redundant peering locations ASes maintain per peering relationship.
-    We note that, while 84\% of networks are `stub' networks, providing transit to no one, usually with few providers and limited geographic extent, we focus our analysis to networks which provide transit to other networks.
+    We now provide some basic observations about our data: the number of regions ASes peer in, and how many redundant peering locations ASes maintain per peering relationship.
+    We note that, while 84\% of networks are `stub' networks that provide transit to no one, usually with few providers and limited geographic extent, we focus our analysis on networks which provide transit to other networks.
     While the failure of stub networks has no impact on the connectivity graph besides its own disconnectivity, transit networks have entire networks as customers and thus their resilience is important not only for their own connectivity, but that of other networks.
 
 \subsubsection*{Geographic Diversity}
@@ -46,7 +46,7 @@
 
 \subsubsection*{Peering Redundancy}
     Networks not only maintain multiple peering relationships in multiple locations, but have redundant peering connections in different regions with the same peers.
-    In Figure~\ref{fig:peering_redundancy} we plot a CDF of the number of peering cells for AS peering relationships, seperating peering relationships between Tier-1 networks, Large (more than 250 peers) networks, and Small networks (less than 250 peers).
+    In Figure~\ref{fig:peering_redundancy} we plot a CDF of the number of peering cells for AS peering relationships, separating peering relationships between Tier-1 networks, Large (more than 250 peers) networks, and Small networks (less than 250 peers).
     For this graph, an $(x,y)$ point means that $y$ fraction of peering AS pairs connect to each other in less than or equal to $x$ cells on the geodesic globe.
 
     Since each Tier-1 network forms a large portion of the global backbone, it is no surprise that one pair peers in almost a hundred places, and the least well-connected pair of Tier-1 networks peers in some 14 places.

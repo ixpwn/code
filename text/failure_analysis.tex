@@ -11,7 +11,7 @@
             &{\bf 20}&1000&1482&1787&1971&2090\\
             &{\bf 25}&986&1464&1777&1965&2085\\
         \end{tabular}
-        \caption[]{\label{tbl:hmetis} Number of cells to remove in order to fully partition the network, such that no users from one partition can communicate with any user in another partition. Columns indicate the number of desired partitions, and rows indicate the allowed imbalance between the largest partition and the average size (so for imbalance 5\%, k partitions, and n cells a partition cannot be more than $1.05 * \frac{n}{k}$). There are 2536 total hyperedges}
+        \caption[]{\label{tbl:hmetis} Number of cells to remove in order to fully partition the network, such that no users from one partition can communicate with any user in another partition. Columns indicate the number of desired partitions, and rows indicate the allowed imbalance between the largest partition and the average size (so for imbalance 5\%, k partitions, and n cells a partition cannot be more than $1.05 * \frac{n}{k}$). There are 2536 total hyperedges.}
     \end{table}
         
     Turning to our final goal, analysis of worst-case scenarios, we attend to two questions. 
@@ -23,25 +23,26 @@
     While the question is somewhat outrageous, the answer illuminates the redundancy of geographic connectivity across the globe, as we find that minimum cuts across our regional connectivity graph are quite large.
     
     To address this question, we use the {\tt hmetis} software package~\cite{hmetis} to discover balanced graph cuts.
-    {\tt hmetis} uses performs hypergraph partitioning to discover minimum cuts that leave behind a balanced number of vertices on either side of the cut.
+    {\tt hmetis} performs hypergraph partitioning to discover minimum cuts that leave behind a balanced number of vertices on either side of the cut.
     We provided {\tt hmetis} with vertices for each AS, and hyperedges for each cell connecting all ASes which peer in that cell. 
     We then weighted each AS with the number of prefixes it announces, using origin prefix data from iPlane~\cite{iplane}.
-    This is an overestimate of connectivity, as it clusters together all ASes which peer in the same region, even though those ASes may not all peer with eachother in that region.
+    This is an overestimate of connectivity, as it clusters together all ASes which peer in the same region, even though those ASes may not all peer with each other in that region.
  
     Table~\ref{tbl:hmetis} displays the number of hyperedges (cells) whose removal was required to partition the network into  2, 4, 8, or 16 approximately equal sized cuts. 
     The rows of the table indicate the allowed imbalance in size between the partitions, the percent imbalance permissible between the largest partition and the average sized partition.
     We observe that even when imbalance is generous and the partitioning is only into two halves, 986 cells must be cut from the world map.
     This illustrates how tightly the global AS-connectivity graph is bound - there is no division of prefixes such that a cut is easy.
+    Given a disaster event that could achieve such a cut would have much more significant impacts on other aspects of society, we are forced to conclude that any action-movie that considers this scenario will not focus on the impact to interdomain connectivity.
     
     \subsubsection*{Regional Bottlenecks}
     We now turn to a more practical question of recent political interest: regional bottlenecks in connectivity.
     Recent events in Iran~\cite{iran}, Egypt~\cite{egypt}, and China~\cite{china} exemplify the implications of the fact that each nation's connectivity to the outside world traverses one or a handful of egress points.
     This leaves the countries vulnerable to malicious or accidental failure at these bottlenecks.
     We seek to identify regions which are similarly vulnerable, by once again examining our regional connectivity graph. 
-    Specifically, we seek to identify regions that could be isolated from the rest of the Internet due to a disaster that disables some number of cells in which ASes interconnect; we refer to this number as the ``budget'' of such a cut.
+    Specifically, we seek to identify regions that could be isolated from the rest of the Internet due to a disaster that disables some number of cells in which ASes interconnect; we refer to this number as the `budget' of such a cut.
 
     In order to answer this question, we must first determine the geographic extent of end-hosts served by an AS.
-    For each AS, we take a random sampling of IP addresses from the announced prefixes seen in the BGP tables provided by the Routeviews project~cite{routeviews}. 
+    For each AS, we take a random sampling of IP addresses from the announced prefixes seen in the BGP tables provided by the Routeviews project~\cite{routeviews}. 
     We then geolocate each IP address using the MaxMind database, and map each IP address to a hexagonal grid cell in the same manner as we did for AS interconnection locations.
     Finally, we cluster together cells that lie within a distance threshold of each other, and repeatedly merge these clusters closer than that same distance threshold together until we reach convergence.
     Given this sampling of cells, we define the geographic extent of an AS to be the area within the convex hull around each of these clusters. 

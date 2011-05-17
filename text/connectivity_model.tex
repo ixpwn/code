@@ -9,7 +9,7 @@
     The ITDK is a router-level Internet map generated from traceroute, mrinfo, and other active measurement data.
     The dataset provides geolocations for each router provided by the MaxMind~\cite{maxmind} commercial geolocation database.
     Because small ASes typically have only one or two providers and are limited in their geographic extent, we remove `stub' ASes from our dataset entirely, limiting our analysis to networks who provide transit to other networks.
-    Because commercial geolocation techniques are on average incorrect on the order of 100 km~\cite{geoloc_accuracy}, our mapping to 94.9 km wide cells ensures that the average geolocated peering is either in its proper cell, or a cell adjacent to its proper cell.
+    Because commercial geolocation techniques are on average incorrect on the order of 100 km~\cite{geoloc_accuracy}, our mapping to 99.5 km wide cells ensures that the average geolocated peering is either in its proper cell, or a cell adjacent to its proper cell.
     
     
     Figure~\ref{fig:worldmap} illustrates our model and our data.
@@ -17,7 +17,7 @@
     The average cell contained adjacencies for 63.8 ASes and 150.9 AS pairs.
     The median cell contained adjacencies for 9 ASes and 7 AS pairs.
     We observe that cell density is heavier in the United States and Europe, which is consistent with the higher density of Internet connectivity in these regions compared to the rest of the world.
-    However, this also may be an artifact of the limitations of commercial geolocation, which provide better city-level granularity in Europe and the United States than in other areas of the world, where IP addresses are more likely to map to the capitol city of their country.
+    However, this also may be an artifact of the limitations of commercial geolocation, which provide better city-level granularity in Europe and the United States than in other areas of the world, where IP addresses are more likely to map to the capital city of their country.
     In particular, commercial geolocation databases such as MaxMind focus on end-host locations, not the locations of core routers.
     Because MaxMind maps entire groups of IP addresses to a single location, many core routers are likely inaccurately geolocated to the locations of an AS's end-host  customers.
 
