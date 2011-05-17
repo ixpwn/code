@@ -10,13 +10,13 @@
     \begin{figure}[tb]
 \centering
 \includegraphics[width=3.25in]{scatter}
-\caption[]{\label{fig:scatter} Scatter plot of observed peers to cells with peering adjacencies. Each point represents an AS which has peering in $x$ cells of the globe, with $y$ total peers. A linear regression (shown) predicts the ratio of cells to peers to be .625 in the average case, while the median case is a 1:1 ratio.} 
+\caption[]{\label{fig:scatter} Scatter plot of observed peers to cells with peering adjacencies. Each point represents an AS which has peering in $x$ cells of the globe, with $y$ total peers. A linear regression (shown, upperline) predicts the ratio of cells to peers to be .625 in the average case. The lower line shows a 1:1 ratio.} 
 \end{figure}
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=3.25in]{ratio}
-\caption[]{\label{fig:ratio} Cumulative distribution of geographic redundancy ratio: the number of cells a network peers in divided by the number of peers it has. Tier-1 networks have... \kristin{can you make the line for Tier-1 networks? I couldn't extrapolate from the data I had which were the Tier-1's.}} 
+\caption[]{\label{fig:ratio} Cumulative distribution of geographic redundancy ratio: the number of cells a network peers in divided by the number of peers it has.} 
 \end{figure}
 
 
@@ -26,7 +26,7 @@
 
 
     We now provide some basic observations of our data: the number of regions ASes peer in, and how many redundant peering locations ASes maintain per peering relationship.
-    We note that, while \justine{k\%} of networks are `stub' networks, providing transit to no one, usually with few providers and limited geographic extent, we focus our analysis to networks which provide transit to other networks.
+    We note that, while 84\% of networks are `stub' networks, providing transit to no one, usually with few providers and limited geographic extent, we focus our analysis to networks which provide transit to other networks.
     While the failure of stub networks has no impact on the connectivity graph besides its own disconnectivity, transit networks have entire networks as customers and thus their resilience is important not only for their own connectivity, but that of other networks.
 
 \subsubsection*{Geographic Diversity}

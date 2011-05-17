@@ -23,9 +23,16 @@
     While the question is somewhat outrageous, the answer illuminates the redundancy of geographic connectivity across the globe, as we find that minimum cuts across our regional connectivity graph are quite large.
     
     To address this question, we use the {\tt hmetis} software package~\cite{hmetis} to discover balanced graph cuts.
-    {\tt hmetis} uses \justine{technique...?} to discover minimum cuts that leave behind a balanced number of vertices on either side of the cut.
-    \justine{what do we feed in to hmetis. need to weight by pfx.}     
+    {\tt hmetis} uses performs hypergraph partitioning to discover minimum cuts that leave behind a balanced number of vertices on either side of the cut.
+    We provided {\tt hmetis} with vertices for each AS, and hyperedges for each cell connecting all ASes which peer in that cell. 
+    We then weighted each AS with the number of prefixes it announces, using origin prefix data from iPlane~\cite{iplane}.
+    This is an overestimate of connectivity, as it clusters together all ASes which peer in the same region, even though those ASes may not all peer with eachother in that region.
  
+    Table~\ref{tbl:hmetis} displays the number of hyperedges (cells) whose removal was required to partition the network into  2, 4, 8, or 16 approximately equal sized cuts. 
+    The rows of the table indicate the allowed imbalance in size between the partitions, the percent imbalance permissible between the largest partition and the average sized partition.
+    We observe that even when imbalance is generous and the partitioning is only into two halves, 986 cells must be cut from the world map.
+    This illustrates how tightly the global AS-connectivity graph is bound - there is no division of prefixes such that a cut is easy.
+    
     \subsubsection*{Regional Bottlenecks}
     We now turn to a more practical question of recent political interest: regional bottlenecks in connectivity.
     Recent events in Iran~\cite{iran}, Egypt~\cite{egypt}, and China~\cite{china} exemplify the implications of the fact that each nation's connectivity to the outside world traverses one or a handful of egress points.
