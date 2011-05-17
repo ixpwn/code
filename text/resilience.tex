@@ -64,20 +64,21 @@
         %connectivity redundancy (multihoming), to building redundant
         %interomain physical links.  
     \abstract{\it
-        Earthquakes, hurricanes, and other regional disasters can severely
+        Earthquakes, hurricanes, and other regional disasters can 
         stress Internet interdomain connectivity.  Because of their widespread
-        impact, these disasters can cause failures of entire Exchange Points or
+        impact, these disasters can cause failures of entire exchange points or
         severance of long distance cables, leading to correlated failures in
         interdomain connectivity.  In this paper we develop a model, geodesic
         failure regionalization, to explore the impact of regional failures on
         AS connectivity.  We map logical AS connectivity links to geographic
-        regions where peering occurs to investigate the regional redundancy of
-        peering connections and the potential impact of large-scale disaster on
-        Internet routing.  By modeling the redundancy of logical AS
-        connectivity in terms of regional peering diversity, we can perform
+        regions where peering occurs to model the regional redundancy of
+        peering connections.
+        By modeling the redundancy of logical AS
+        connectivity, we can perform
         finer-grained analysis of the impact of catastrophe than work which
-        relies only on logical AS connectivity alone.  Our results show that
-        our model\ldots
+        relies only on logical AS connectivity alone.  
+        Our data demonstrates that most transit-providing networks peer in redundant locations, such that small physical disasters ar unlikely to partition two peering networks.    
+    However, our data also includes geographic regions served by only a limited number of ASes with limited peering to external networks, leaving these geographic regions suceptible to disconnection after damage to only a few regions containing all of their egress connectivity.
     }
     
     \section{Introduction}
